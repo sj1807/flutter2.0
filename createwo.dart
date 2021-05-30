@@ -4,31 +4,29 @@ import 'package:http/http.dart' as http;
 import './main.dart';
 
 
-class Breakdown extends StatefulWidget{
+class Cworkorder extends StatefulWidget{
   @override
-  State<Breakdown> createState() => new _State();
+  State<Cworkorder> createState() => new _State();
 }
 
-class _State extends State<Breakdown>{
+class _State extends State<Cworkorder>{
 
 
 httpcall() async {
    // print('$name, from function $pass');
-    var uri =  Uri.parse("$baseUrl/pm/noticreate");
+    var uri =  Uri.parse("$baseUrl/pm/wocreate");
     try{
-      var lv_priority; var lv_machine; var lv_location;
-      if(dropdownValue=='CNC Machine'){lv_machine="10000159";}
-      if(dropdownValue=='Grinding Machine'){lv_machine="10000030";}
-      if(dropdownValue=='UT Compressor'){lv_machine="10000003";}
-      if(dropdownValue=='Screw Guage'){lv_machine="10000025";}
+      var lv_priority; var lv_machine; var lv_ordertype;
+      if(equipment=='CNC Machine'){lv_machine="10000159";}
+      if(equipment=='Grinding Machine'){lv_machine="10000030";}
+      if(equipment=='UT Compressor'){lv_machine="10000003";}
+      if(equipment=='Screw Guage'){lv_machine="10000025";}
       if(priority=='VeryHigh'){lv_priority="1";}
       if(priority=='High'){lv_priority="2";}
       if(priority=='Medium'){lv_priority="3";}
       if(priority=='Low'){lv_priority="4";}
-      if(location=='GEC Mechanical Works'){lv_location="GEC-MECH";}
-      if(location=='Production Block1'){lv_location="4000-300";}
-      if(location=='Steel Melt Shop'){lv_location="CNS1-PL2-SM";}
-      if(location=='Instrument Maintenance'){lv_location="SCREW_GUAGE";}
+      if(ordertype=='Plant Maintenance Order'){lv_ordertype="PM01";}
+      if(ordertype=='Breakdown Maintenance Order'){lv_ordertype="PM02";}
 
 
       final response = await http.post(uri,
@@ -37,23 +35,17 @@ httpcall() async {
       },
       body:
           jsonEncode(<String,String>{
-            'bdownedate' : enddate.text,//1
-            'bdownetime' : endtime.text,//2
-            'bdownsdate' : startdate.text, //3
-            'bdownstime' : starttime.text, //4 
-            'shorttext' : shortnote.text, //5
-            'machine' : lv_machine, //6
-            'location' : lv_location, //7
-            'isbreak' : 'X', //8
-            'description' : details.text, //9 
-            'partner' : person.text, //10
-            'priority' : lv_priority, //11
-            'reporter' : reportedby.text, //12
-            'medate' : '',//enddate.text, //13
-            'metime' : '',//endtime.text, //14
-            'msdate' : '',//startdate.text, //15
-            'mstime' : '',//starttime.text, 
-            'type': 'B2'//16
+            'deatileddes' : deatileddes.text,//enddate.text,//1
+            'workhr' : workhr.text,//endtime.text,//2
+            'equipment' : lv_machine,//startdate.text, //3
+            'material' : material.text,//starttime.text, //4 
+            'notifno' : notifno.text, //5
+            'notiftype' : lv_priority, //6
+            'ordertype' : lv_ordertype , //7
+            'persno' : persno.text, //8
+            'reqquantity' : reqquantity.text , //9 
+            'shortext' : shortext.text, //10
+            'activitydur' : activitydur.text , //11
 
           }),
       );
@@ -61,10 +53,8 @@ httpcall() async {
       print(resp["status"]);
       if(resp["status"]!=null){
         print("ok user");
-        var temps = resp["status"]["LV_NOTIFICATION"]["_text"];
-        print(temps);
-        var temp = int.parse(temps);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Created Notification Number is : $temp')));
+        var temps = resp["status"]["MESSAGE"]["_text"];
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$temps')));
       }
       else{
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Creation error verify your datas')));
@@ -72,26 +62,26 @@ httpcall() async {
       }
        
   }
-   catch(error,stacktrace){
+   catch(error){
       print(error);
-      print(stacktrace);
     }
   }
 
 
   final _formKey = GlobalKey<FormState>();
   //TextEditingController functional = TextEditingController();
-  TextEditingController shortnote = TextEditingController();
-  TextEditingController startdate = TextEditingController();
-  TextEditingController enddate = TextEditingController();
-  TextEditingController starttime = TextEditingController();
-  TextEditingController endtime = TextEditingController();
-  TextEditingController details = TextEditingController();
-  TextEditingController reportedby = TextEditingController();
-  TextEditingController person = TextEditingController();
-  String dropdownValue = 'Grinding Machine';
-  String priority = 'High';
-  String location = 'GEC Mechanical Works';
+  TextEditingController deatileddes = TextEditingController();//1
+  TextEditingController workhr = TextEditingController();//2
+  TextEditingController material = TextEditingController();//3
+  TextEditingController notifno = TextEditingController();//4
+  TextEditingController notiftype = TextEditingController();//5
+  TextEditingController persno = TextEditingController();//6
+  TextEditingController reqquantity = TextEditingController();//7
+  TextEditingController shortext = TextEditingController();//8
+  TextEditingController activitydur = TextEditingController();//9
+  String equipment = 'Grinding Machine';//10
+  String priority = 'High';//11
+  String ordertype = 'Plant Maintenance Order';
 
   @override
 
@@ -99,7 +89,7 @@ httpcall() async {
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Breakdown Notification',
+        title: Text('Create Workorder',
         style: TextStyle(
           fontSize: 15
         )),
@@ -122,7 +112,7 @@ httpcall() async {
               Padding(
                   padding: EdgeInsets.all(10),
                   child: DropdownButton<String>(
-                    value: dropdownValue,
+                    value: equipment,
                     icon: const Icon(Icons.arrow_downward),
                     iconSize: 24,
                     elevation: 16,
@@ -134,7 +124,7 @@ httpcall() async {
                     ),
                     onChanged: (newValue) {
                       setState(() {
-                        dropdownValue = newValue.toString();
+                        equipment = newValue.toString();
                       });
                     },
                     items: <String>[
@@ -188,12 +178,12 @@ httpcall() async {
                   ),
               Padding(
                 padding: EdgeInsets.all(1),
-                child: Text("Select fuctional location:"),
+                child: Text("Select Order type:"),
               ),
               Padding(
                   padding: EdgeInsets.all(10),
                   child: DropdownButton<String>(
-                    value: location,
+                    value: ordertype,
                     icon: const Icon(Icons.arrow_downward),
                     iconSize: 24,
                     elevation: 16,
@@ -203,16 +193,14 @@ httpcall() async {
                       //width: 100,
                       color: Colors.deepPurpleAccent,
                     ),
-                    onChanged: (newValue) {
+                    onChanged: ( newValue) {
                       setState(() {
-                        location = newValue.toString();
+                        ordertype = newValue.toString();
                       });
                     },
                     items: <String>[
-                      'GEC Mechanical Works',
-                      'Production Block1',
-                      'Steel Melt Shop',
-                      'Instrument Maintenance'
+                      'Plant Maintenance Order',
+                      'Breakdown Maintenance Order',
                       
                     ].map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
@@ -226,9 +214,9 @@ httpcall() async {
                 padding: EdgeInsets.all(10),
                 child: TextFormField(
                   // The validator receives the text that the user has entered.
-                  controller: shortnote,
+                  controller: shortext,
                   decoration: new InputDecoration(
-                    labelText: "Notification heading",
+                    labelText: "Order heading",
                     contentPadding: EdgeInsets.all(20.0),
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
@@ -238,7 +226,7 @@ httpcall() async {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter notification heading';
+                      return 'Please enter order heading';
                     }
                     return null;
                   },
@@ -247,10 +235,10 @@ httpcall() async {
               Padding(
                 padding: EdgeInsets.all(10),
                 child: TextFormField(
-                  controller: startdate,
+                  controller: notifno,
                   // The validator receives the text that the user has entered.
                   decoration: new InputDecoration(
-                    labelText: "Breakdown Start Date",
+                    labelText: "Notification number",
                     contentPadding: EdgeInsets.all(20.0),
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
@@ -258,21 +246,15 @@ httpcall() async {
                       borderSide: new BorderSide(),
                     ),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter breakdown starting date';
-                    }
-                    return null;
-                  },
                 )
               ),
               Padding(
                 padding: EdgeInsets.all(10),
                 child: TextFormField(
-                  controller: starttime,
+                  controller: deatileddes,
                   // The validator receives the text that the user has entered.
                   decoration: new InputDecoration(
-                    labelText: "Breakdown Start Time",
+                    labelText: "Activity Description",
                     contentPadding: EdgeInsets.all(20.0),
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
@@ -282,7 +264,7 @@ httpcall() async {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter starting time';
+                      return 'Please enter the activity';
                     }
                     return null;
                   },
@@ -291,10 +273,10 @@ httpcall() async {
               Padding(
                 padding: EdgeInsets.all(10),
                 child: TextFormField(
-                  controller: enddate,
+                  controller: workhr,
                   // The validator receives the text that the user has entered.
                   decoration: new InputDecoration(
-                    labelText: "Breakdown End Date",
+                    labelText: "Activity Duration",
                     contentPadding: EdgeInsets.all(20.0),
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
@@ -304,7 +286,7 @@ httpcall() async {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter breakdown ending date';
+                      return 'Please enter duration';
                     }
                     return null;
                   },
@@ -313,75 +295,7 @@ httpcall() async {
               Padding(
                 padding: EdgeInsets.all(10),
                 child: TextFormField(
-                  controller: endtime,
-                  // The validator receives the text that the user has entered.
-                  decoration: new InputDecoration(
-                    labelText: "Breakdown End time",
-                    contentPadding: EdgeInsets.all(20.0),
-                    fillColor: Colors.white,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(10.0),
-                      borderSide: new BorderSide(),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter breakdown end time';
-                    }
-                    return null;
-                  },
-                )
-              ),
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: TextFormField(
-                  controller: details,
-                  // The validator receives the text that the user has entered.
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  decoration: new InputDecoration(
-                    labelText: "Detailed Breakdown Description",
-                    contentPadding: EdgeInsets.all(20.0),
-                    fillColor: Colors.white,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(10.0),
-                      borderSide: new BorderSide(),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter Detailed description';
-                    }
-                    return null;
-                  },
-                )
-              ),
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: TextFormField(
-                  controller: reportedby,
-                  // The validator receives the text that the user has entered.
-                  decoration: new InputDecoration(
-                    labelText: "Reporting person",
-                    contentPadding: EdgeInsets.all(20.0),
-                    fillColor: Colors.white,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(10.0),
-                      borderSide: new BorderSide(),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
-                    }
-                    return null;
-                  },
-                )
-              ),
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: TextFormField(
-                  controller: person,
+                  controller: persno,
                   // The validator receives the text that the user has entered.
                   decoration: new InputDecoration(
                     labelText: "Person Responsible",
@@ -400,6 +314,62 @@ httpcall() async {
                   },
                 )
               ),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: TextFormField(
+                  controller: activitydur,
+                  // The validator receives the text that the user has entered.
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  decoration: new InputDecoration(
+                    labelText: "Work Duration",
+                    contentPadding: EdgeInsets.all(20.0),
+                    fillColor: Colors.white,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(10.0),
+                      borderSide: new BorderSide(),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter Work Duration';
+                    }
+                    return null;
+                  },
+                )
+              ),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: TextFormField(
+                  controller: material,
+                  // The validator receives the text that the user has entered.
+                  decoration: new InputDecoration(
+                    labelText: "Required Material",
+                    contentPadding: EdgeInsets.all(20.0),
+                    fillColor: Colors.white,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(10.0),
+                      borderSide: new BorderSide(),
+                    ),
+                  ),
+                )
+              ),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: TextFormField(
+                  controller: reqquantity,
+                  // The validator receives the text that the user has entered.
+                  decoration: new InputDecoration(
+                    labelText: "Required Quantity",
+                    contentPadding: EdgeInsets.all(20.0),
+                    fillColor: Colors.white,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(10.0),
+                      borderSide: new BorderSide(),
+                    ),
+                  ),
+                )
+              ),
 
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -414,19 +384,6 @@ httpcall() async {
                       // you'd often call a server or save the information in a database.
                      // print(functional.text);
                       print("printing in this order");
-                      print(shortnote.text);
-                      print(startdate.text);
-                      print(enddate.text);
-                      print(starttime.text);
-                      print(endtime.text);
-                      print(details.text);
-                      print(reportedby.text);
-                      print(person.text);
-                      print(priority);
-                      if(priority=="Medium"){
-                        print(1);
-                      }
-                      print(dropdownValue);
                       httpcall();
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Processing Data')));
                     }
@@ -444,17 +401,20 @@ httpcall() async {
         type: BottomNavigationBarType.fixed,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.warning,color: Color.fromRGBO(220, 5, 5, 100),),
-            title: new Text("Breakdown Notifications"),
+            icon: Icon(Icons.home,color: Color.fromRGBO(220, 5, 5, 100),),
+            title: new Text("Home"),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications,color: Color.fromRGBO(5, 5, 220, 100),),
-            title: new Text("Maintenance Notifications")
+            icon: Icon(Icons.settings,color: Color.fromRGBO(5, 5, 220, 100),),
+            title: new Text("View Workorders")
           )
         ],
         onTap: (index){
+            if(index==0){
+              Navigator.pushReplacementNamed(context, '/home');
+            }
             if(index==1){
-              Navigator.pushReplacementNamed(context, '/maint');
+              Navigator.pushReplacementNamed(context, '/wolist');
             }
           print("$index this is tapped index");
         },

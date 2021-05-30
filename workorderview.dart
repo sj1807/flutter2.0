@@ -105,7 +105,7 @@ class Viewwo extends StatelessWidget{
           Container(
             alignment: Alignment.center,
             padding: EdgeInsets.all(10),
-            child: Text("Workorders are displayed according to their status",
+            child: Text("Workorders for $loca are displayed below",
               textAlign: TextAlign.center,)
             ),
           Container(

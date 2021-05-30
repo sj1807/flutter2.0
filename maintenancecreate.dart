@@ -53,7 +53,7 @@ httpcall() async {
             'metime' : endtime.text, //14
             'msdate' : startdate.text, //15
             'mstime' : starttime.text, 
-            'type': 'M1'//16
+            'type': 'B1'//16
 
           }),
       );

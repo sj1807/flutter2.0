@@ -66,6 +66,9 @@ class Detailednote extends StatelessWidget{
                       ),
                     ),
                     Container(
+                      child: Divider(color: Colors.black,height: 50,),
+                    ),
+                    Container(
                       padding: EdgeInsets.all(5),
                       margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
                       child: RichText(
@@ -96,6 +99,9 @@ class Detailednote extends StatelessWidget{
                         ),
                       )
                      // Text('Priority : '+ + '\n\nDescription : '+  + '\n\nNotification Status : '+),
+                    ),
+                    Container(
+                      child: Divider(color: Colors.black,height: 50,),
                     ), 
                     Container(
                       padding: EdgeInsets.all(10),
@@ -203,7 +209,9 @@ class Detailednote extends StatelessWidget{
                       ))
                       //Text(+ ),
                     ),
-                    Container(child: Text("\n\n\nchild of future builfder $notinum \n"+ snapshot.data[0].workcenter+' and '+snapshot.data[0].functional))
+                    Container(
+                      child: Divider(color: Colors.black,height: 50,),
+                    ),
                   ]
                 );
               }
@@ -275,14 +283,15 @@ class Notificationdetails{
         print("ok user");
 
         var a="Not created";var b="NA";var c="NA"; var d="NA"; var e="NA";var f="0";var g="NA";
-        var h="NA";var i="NA";var j="NA";var k="NA";var l="NA";var m="NA";var n="0";
+        var h="";var i="NA";var j="NA";var k="NA";var l="NA";var m="NA";var n="0";
         var o = "na";var p = "na";var q = "na";var r = "na";var s = "no";var t = "breakdown";var u = "no";
         var v = "breakdown";var w ="na";var x="na";
         if(temp["COMPANY"]["_text"]!=null){i=temp["COMPANY"]["_text"] ;}//1
         if(temp["PRIORITY"]["_text"]!=null){d=temp["PRIORITY"]["_text"] ;}//2
         if(temp["PLANT"]["_text"]!=null){j=temp["PLANT"]["_text"] ;}//3
         if(temp["PARTNER"]["_text"]!=null){n=temp["PARTNER"]["_text"] ;}//4
-        if(temp["NOTLONGTXT"]["item"]!=null){h=temp["NOTLONGTXT"]["item"]["TEXT_LINE"]["_text"];}//5
+      
+        //5
         if(temp["HEADERTEXT"]["EQUIDESCR"]["_text"]!=null){g=temp["HEADERTEXT"]["EQUIDESCR"]["_text"] ;}//6
         if(temp["HEADER"]["EQUIPMENT"]["_text"]!=null){f=temp["HEADER"]["EQUIPMENT"]["_text"] ;}//7
         if(temp["HEADER"]["SHORT_TEXT"]["_text"]!=null){e=temp["HEADER"]["SHORT_TEXT"]["_text"] ;}//8
@@ -301,8 +310,9 @@ class Notificationdetails{
         if(temp["HEADER"]["REPORTEDBY"]["_text"]!=null){m=temp["HEADER"]["REPORTEDBY"]["_text"] ;}//12
         if(temp["HEADER"]["NOTIF_TYPE"]["_text"]!=null){
           switch(temp["HEADER"]["NOTIF_TYPE"]["_text"]){
-            case 'B1':{ b="Breakdown Notification";}break;
-            case 'M1':{ b="Maintenance Notification";}break;
+            case 'B1':{ b="Preventive Notification";}break;
+            case 'B2':{ b="Breakdown Notification";}break;
+            case 'M1':{ b="Maintenance Request";}break;
             default:{b=temp["HEADER"]["NOTIF_TYPE"]["_text"];}break;
           }
         }//13
@@ -311,16 +321,25 @@ class Notificationdetails{
         if(temp["HEADER"]["DESSTTIME"]["_text"]!=null){p=temp["HEADER"]["DESSTTIME"]["_text"];}//16
         if(temp["HEADER"]["DESENDDATE"]["_text"]!=null){q=temp["HEADER"]["DESENDDATE"]["_text"];}//17
         if(temp["HEADER"]["DESENDTM"]["_text"]!=null){r=temp["HEADER"]["DESENDTM"]["_text"];}//18
-        if(temp["HEADER"]["NOTIF_TYPE"]["_text"]=='B1'){
+        //if(temp["HEADER"]["NOTIF_TYPE"]["_text"]=='B2'){
         if(temp["HEADER"]["STRMLFNDATE"]["_text"]!=null){s=temp["HEADER"]["STRMLFNDATE"]["_text"];}//19
         if(temp["HEADER"]["STRMLFNTIME"]["_text"]!=null){t=temp["HEADER"]["STRMLFNTIME"]["_text"];}//20
         if(temp["HEADER"]["ENDMLFNDATE"]["_text"]!=null){u=temp["HEADER"]["ENDMLFNDATE"]["_text"];}//21
         if(temp["HEADER"]["ENDMLFNTIME"]["_text"]!=null){v=temp["HEADER"]["ENDMLFNTIME"]["_text"];}//22
 
-        }
+        //}        
         if(temp["HEADER"]["NOTIF_DATE"]["_text"]!=null){w=temp["HEADER"]["NOTIF_DATE"]["_text"];}//22
         if(temp["HEADER"]["CHANGED_ON"]["_text"]!=null){x=temp["HEADER"]["CHANGED_ON"]["_text"];}//22
 
+          try{
+        if(temp["NOTLONGTXT"]["item"]!=null){h=temp["NOTLONGTXT"]["item"]["TEXT_LINE"]["_text"];
+        }
+        }catch(error){
+          for (var items in temp["NOTLONGTXT"]["item"]){
+            print(items["TEXT_LINE"]["_text"]);
+            h+= items["TEXT_LINE"]["_text"];
+          }
+        }
 
 
 
@@ -348,8 +367,9 @@ class Notificationdetails{
 
     }
 
-    catch(error){
+    catch(error,stacktrace){
       print(error);
+      print(stacktrace);
       var a="Not created";var b="NA";var c="NA"; var d="NA"; var e="NA";var f="0";var g="NA";
         var h="0";var i="NA";var j="NA";var k="NA";var l="NA";var m="NA";var n="0";
         var o = "na";var p = "na";var q = "na";var r = "na";var s = "no";var t = "breakdown";var u = "no";
@@ -363,8 +383,10 @@ class Notificationdetails{
   }
 String removezero(String a){
   print(a);
+  try{
   var temp = int.parse(a);
   //  print("$temp convertedd value");
   return temp.toString();
+  }catch(error){return a;}
   //return a;
 }

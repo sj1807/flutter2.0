@@ -84,8 +84,8 @@ class _State extends State<Selectfun> {
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(
                   onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Redirection for $location Data')));
-                     // Navigator.push(context, MaterialPageRoute(builder: (context)=>(Viewwo(location)),
+                      //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Redirection for $location Data')));
+                     Navigator.pushNamed(context, '/cwo');
                       //)
                       //);
                   },
