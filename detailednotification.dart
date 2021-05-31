@@ -2,9 +2,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import './main.dart';
+import './changenotistatus.dart';
 //import './viewbreakdown.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import './changenotif.dart';
 
 
 
@@ -95,6 +97,9 @@ class Detailednote extends StatelessWidget{
                             TextSpan(text:snapshot.data[0].status,style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold ) ),
                             TextSpan(text:'\n\nNotification date : ',style: TextStyle(color:Colors.black ) ),
                             TextSpan(text:snapshot.data[0].date,style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold ) ),
+                            TextSpan(text:'\n\nChanged On : ',style: TextStyle(color:Colors.black ) ),
+                            TextSpan(text:snapshot.data[0].chdate,style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold ) ),
+
                           ],
                         ),
                       )
@@ -175,7 +180,7 @@ class Detailednote extends StatelessWidget{
                       child: RichText(
                         text: TextSpan(
                           children:<TextSpan>[
-                            TextSpan(text: '\u{25AA}The workcenter and Functional location for this notification is',style: TextStyle(color:Colors.black)),
+                            TextSpan(text: '\u{25AA}The workcenter and Functional location for this notification is ',style: TextStyle(color:Colors.black)),
                             TextSpan(text:snapshot.data[0].workcenter +' and '+snapshot.data[0].functional,style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold)),
 
                           ]
@@ -220,6 +225,55 @@ class Detailednote extends StatelessWidget{
           ),
         ),
       ),
+        bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: [
+         // BottomNavigationBarItem(
+            //icon: Icon(Icons.warning,color: Color.fromRGBO(220, 5, 5, 100),),
+           // title: new Text("View Notification"),
+         // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.edit,color: Color.fromRGBO(5, 5, 220, 100),),
+            title: new Text("Edit Notification")
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.circle_notifications,color: Color.fromRGBO(5, 5, 220, 100),),
+            title: new Text("Change Status")
+          )
+        ],
+        onTap: (index){
+            if(index==2){
+              Navigator.pushReplacementNamed(context, '/vbnote');
+            }
+            if(index==0){
+              String tempe = detailssender[0].status;
+              print('status'+tempe);
+              if(tempe.contains('OSNO')||tempe.contains('NOPR')||tempe.contains('InProgress')||tempe.contains('Outstanding')){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Changenotif(detailssender,notinum),
+              ),);
+              }else{
+              
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Cannot change closed or in progress notifications')));
+
+              //Navigator.pushReplacementNamed(context, '/vbnote');
+              }
+            }
+            if(index==1){
+              String tempe = detailssender[0].status;
+              print('status'+tempe);
+              if(tempe.contains('ONCO')||tempe.contains('Closed')){
+  
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Cannot change closed notifications status')));
+
+              //Navigator.pushReplacementNamed(context, '/vbnote');
+              }else{
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>Changenotis(notinum),
+              ),);
+              }
+            }
+          print("$index this is tapped index");
+        },
+      ),
     );
 
 
@@ -258,9 +312,10 @@ class Notificationdetails{
   this.mend,this.mendtime,this.bstart,this.bstarttime,this.bend,this.bendtime,this.date,this.chdate);
 
 }
+List <Notificationdetails> detailssender=[];
 
  Future<List<Notificationdetails>> httpcall(String number) async {
-
+   detailssender.clear();
     print('$number is selected');
     var uri =  Uri.parse("$baseUrl/pm/notidetails");
     try{
@@ -348,9 +403,11 @@ class Notificationdetails{
 
 
 
-        
+        print("getted status is "+c);
         Notificationdetails data = Notificationdetails(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x);
         details.add(data);
+        detailssender.add(data);
+        print(detailssender[0].reportedby+'updated valus');
       print(details.length);
       return details;
       }

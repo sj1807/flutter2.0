@@ -1,13 +1,13 @@
-import './workorderview.dart';
-import './main.dart';
 import 'package:flutter/material.dart';
+import './functionalnotification.dart';
 
-class Selectfun extends StatefulWidget{
+
+class Selectfunnoti extends StatefulWidget{
     @override
-  State<Selectfun> createState() => new _State();
+  State<Selectfunnoti> createState() => new _State();
 }
 
-class _State extends State<Selectfun> {
+class _State extends State<Selectfunnoti> {
 
   String location = 'GEC Mechanical Works';
   @override
@@ -17,7 +17,7 @@ class _State extends State<Selectfun> {
     return Scaffold(
       resizeToAvoidBottomInset: false ,
       appBar: AppBar(
-        title:Text ('Work order selection ',
+        title:Text ('Notification selection ',
             style: TextStyle(
                 fontSize: 15
             )
@@ -31,7 +31,7 @@ class _State extends State<Selectfun> {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.all(1),
-              child: Text("         Select Functional Location to view workorders"),
+              child: Text("         Select Functional Location to view notification"),
             ),
             Padding(
               padding: EdgeInsets.all(10),
@@ -55,7 +55,7 @@ class _State extends State<Selectfun> {
                 items: <String>[
                   'GEC Mechanical Works',
                   'Production Block1',
-                  //'Steel Melt Shop',
+                  'Steel Melt Shop',
                   'Instrument Maintenance'    
                 ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
@@ -70,15 +70,12 @@ class _State extends State<Selectfun> {
                 child: ElevatedButton(
                   onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Redirection for $location Data')));
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>(Viewwo(location)),
+                     Navigator.push(context, MaterialPageRoute(builder: (context)=>(Vfunnoti(location)),
                       ));
                   },
-                  child: Text('Get WorkOrders'),
+                  child: Text('Goto notification'),
                 ),
             ),
-            
-
-
           ]
         ),
       ),

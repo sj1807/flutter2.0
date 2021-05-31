@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import './main.dart';
+import './sessionlog.dart';
 
 
 class MBreakdown extends StatefulWidget{
@@ -11,6 +12,24 @@ class MBreakdown extends StatefulWidget{
 
 class _State extends State<MBreakdown>{
 
+
+  Future<void> sendnoti(String temps)async{
+    var uri =  Uri.parse("$baseUrl/sendnoti");
+    try{
+      final response = await http.post(uri,
+        headers: <String,String>{
+         'Content-Type':'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String,String>{
+          "fcmtoken":'$fcm',
+          "title" : "Created Maintenance Notification",
+           "message":"Created by:$sessionuser - $temps"
+
+          }),
+      );
+    }catch(error){print(error);}
+
+  }
 
 httpcall() async {
    // print('$name, from function $pass');
@@ -63,6 +82,9 @@ httpcall() async {
         print("ok user");
         var temps = resp["status"]["LV_NOTIFICATION"]["_text"];
         var temp = int.parse(temps);
+        Logs ldata = Logs('Created a Maintenance Notification Number is : $temp');
+        sessionlog.add(ldata);
+        sendnoti('Created Notification Number is : $temp');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Created Notification Number is : $temp')));
       }
       else{

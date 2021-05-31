@@ -5,6 +5,7 @@ import './main.dart';
 //import './viewbreakdown.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import './changewo.dart';
 
 
 class Detailedwo extends StatelessWidget{
@@ -214,12 +215,40 @@ class Detailedwo extends StatelessWidget{
           ),
         ),
       ),
+      
+        bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.reorder,color: Color.fromRGBO(5, 5, 220, 100),),
+            title: new Text("View workorder")
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.edit,color: Color.fromRGBO(5, 5, 220, 100),),
+            title: new Text("Change workorder")
+          )
+        ],
+        onTap: (index){
+          print('pushed index is $index'+sender[0].status);
+            if(index==0){
+              Navigator.pushReplacementNamed(context, '/wolist');
+            }
+            if(index==1){
+              if(sender[0].status.contains('Created')||sender[0].status.contains('CRTD')){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Changewo(wonum,sender)
+              ),);
+              }else{
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Cannot change closed or confirmed order')));
+}
+              //Navigator.pushReplacementNamed(context, '/vbnote');
+            }
+        }
+      )
     );
-
-
 
   }
 }
+   List<Notificationdetailswo> sender = [];
 class Operations{
   final String odes;
   final String owork;
@@ -231,7 +260,7 @@ class Operations{
 }
 List<Operations> operation = [];
 
-class Notificationdetails{
+class Notificationdetailswo{
   final String number; //a
   final String type; //b
   final String status; //c
@@ -257,14 +286,14 @@ class Notificationdetails{
   final String operationduration;
   final String currency;//w
 
-  Notificationdetails(this.number,this.type,this.status,this.priority,this.shorttxt,this.equipment,this.functional,this.orderdate,
+  Notificationdetailswo(this.number,this.type,this.status,this.priority,this.shorttxt,this.equipment,this.functional,this.orderdate,
   this.changedate,this.operation,this.workcenter,this.opstatus,this.workduration,this.personresp,this.cost,this.earlystartdate,this.earlystarttime,
   this.earlyenddate,this.earlyendtime,this.material,this.mattext,this.quantity,this.operationduration,this.currency);
 
 }
 
- Future<List<Notificationdetails>> httpcall(String number) async {
-
+ Future<List<Notificationdetailswo>> httpcall(String number) async {
+   sender.clear();
    operation.clear();
     print('$number is selected');
     var uri =  Uri.parse("$baseUrl/pm/wodetails");
@@ -282,7 +311,7 @@ class Notificationdetails{
       final resp = json.decode(response.body);
       final temp = resp["status"];
       print(temp);
-      List<Notificationdetails> details = [];
+      List<Notificationdetailswo> details = [];
       //print(resp["status"]["NOTIFICATIONS"]["item"] );
       if(temp!=null){
         print("ok user");
@@ -301,7 +330,14 @@ class Notificationdetails{
           }
           
           ;}//1ordertype
-        if(temp["HEADER"]["SYS_STATUS"]["_text"]!=null){c=temp["HEADER"]["SYS_STATUS"]["_text"] ;}//2status
+        if(temp["HEADER"]["SYS_STATUS"]["_text"]!=null){
+          if(temp["HEADER"]["SYS_STATUS"]["_text"].contains('CRTD')){
+            c='Created';
+          }
+          if(temp["HEADER"]["SYS_STATUS"]["_text"].contains('CLSD')){
+            c='Closed';
+          }//2status
+          }else{c=temp["HEADER"]["SYS_STATUS"]["_text"] ;}
         if(temp["HEADER"]["PRIORITY"]["_text"]!=null){
           //print('prito'+temp["HEADER"]["PRIORITY"]["_text"]);
           switch(temp["HEADER"]["PRIORITY"]["_text"]){
@@ -326,7 +362,20 @@ class Notificationdetails{
         for (var items in temp["OPERATIONS"]["item"]){
           if(items["DESCRIPTION"]["_text"]!=null){j=items["DESCRIPTION"]["_text"] ;}//9 operation
           if(items["WORK_CNTR"]["_text"]!=null){k=items["WORK_CNTR"]["_text"] ;}//10 workcenter
-          if(items["SYSTEM_STATUS_TEXT"]["_text"]!=null){l=items["SYSTEM_STATUS_TEXT"]["_text"] ;}//12 opstatus
+          if(items["SYSTEM_STATUS_TEXT"]["_text"]!=null){
+            print(items["SYSTEM_STATUS_TEXT"]["_text"]);
+            if(items["SYSTEM_STATUS_TEXT"]["_text"].contains('CRTD')){
+              l="Created";
+            }
+            else if(items["SYSTEM_STATUS_TEXT"]["_text"].contains('CNF')){
+              l="Confirmed";
+            }
+            else if(items["SYSTEM_STATUS_TEXT"]["_text"].contains('TECO')){
+              l="Technically Completed";
+            }else{
+            l=items["SYSTEM_STATUS_TEXT"]["_text"] ;
+            }//12 opstatus
+          }//12 opstatus
           if(items["DURATION_NORMAL"]["_text"]!=null){m=items["DURATION_NORMAL"]["_text"] ;}//13 workduration
           if(items["PERS_NO"]["_text"]!=null){n=removezero(items["PERS_NO"]["_text"]) ;}//14 person
           if(items["PRICE"]["_text"]!=null){o=items["PRICE"]["_text"];}//+' '+temp["OPERATIONS"]["item"]["CURRENCY"]["_text"];}//15 cost
@@ -345,7 +394,20 @@ class Notificationdetails{
       }catch(error){
         if(temp["OPERATIONS"]["item"]["DESCRIPTION"]["_text"]!=null){j=temp["OPERATIONS"]["item"]["DESCRIPTION"]["_text"] ;}//9 operation
         if(temp["OPERATIONS"]["item"]["WORK_CNTR"]["_text"]!=null){k=temp["OPERATIONS"]["item"]["WORK_CNTR"]["_text"] ;}//10 workcenter
-        if(temp["OPERATIONS"]["item"]["SYSTEM_STATUS_TEXT"]["_text"]!=null){l=temp["OPERATIONS"]["item"]["SYSTEM_STATUS_TEXT"]["_text"] ;}//12 opstatus
+        if(temp["OPERATIONS"]["item"]["SYSTEM_STATUS_TEXT"]["_text"]!=null){
+            //print(items["SYSTEM_STATUS_TEXT"]["_text"]);
+            if(temp["OPERATIONS"]["item"]["SYSTEM_STATUS_TEXT"]["_text"].contains('CRTD')){
+              l="Created";
+            }
+            else if(temp["OPERATIONS"]["item"]["SYSTEM_STATUS_TEXT"]["_text"].contains('CNF')){
+              l="Confirmed";
+            }
+            else if(temp["OPERATIONS"]["item"]["SYSTEM_STATUS_TEXT"]["_text"].contains('TECO')){
+              l="Technically Completed";
+            }else{
+            l=temp["OPERATIONS"]["item"]["SYSTEM_STATUS_TEXT"]["_text"];
+            }//12 opstatus
+          }//12 opstatus
         if(temp["OPERATIONS"]["item"]["DURATION_NORMAL"]["_text"]!=null){m=temp["OPERATIONS"]["item"]["DURATION_NORMAL"]["_text"] ;}//13 workduration
         if(temp["OPERATIONS"]["item"]["PERS_NO"]["_text"]!=null){n=removezero(temp["OPERATIONS"]["item"]["PERS_NO"]["_text"]) ;}//14 person
         if(temp["OPERATIONS"]["item"]["PRICE"]["_text"]!=null){o=temp["OPERATIONS"]["item"]["PRICE"]["_text"];}//+' '+temp["OPERATIONS"]["item"]["CURRENCY"]["_text"];}//15 cost
@@ -378,8 +440,9 @@ class Notificationdetails{
 
 
         
-        Notificationdetails data = Notificationdetails(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x);
+        Notificationdetailswo data = Notificationdetailswo(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x);
         details.add(data);
+        sender.add(data);
       print(details.length);
       return details;
       }
@@ -389,7 +452,7 @@ class Notificationdetails{
         var h="NA";var i="NA";var j="NA";var k="NA";var l="NA";var m="NA";var n="NA";
         var o = "na";var p = "na";var q = "na";var r = "na";var s = "na";var t = "na";var u = "na";
         var v = "na";var w ="na";var x ="na";
-        Notificationdetails data = Notificationdetails(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x);
+        Notificationdetailswo data = Notificationdetailswo(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x);
         details.add(data);
         return details;
       }
@@ -403,8 +466,8 @@ class Notificationdetails{
       var h="NA";var i="NA";var j="NA";var k="NA";var l="NA";var m="NA";var n="NA";
       var o = "na";var p = "na";var q = "na";var r = "na";var s = "na";var t = "na";var u = "na";
         var v = "na";var w ="na";
-        Notificationdetails data = Notificationdetails(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,w);
-        List<Notificationdetails> details = [];
+        Notificationdetailswo data = Notificationdetailswo(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,w);
+        List<Notificationdetailswo> details = [];
         details.add(data);
         return details;
 

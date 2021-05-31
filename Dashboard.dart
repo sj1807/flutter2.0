@@ -2,9 +2,13 @@
 import 'package:flutter/material.dart';
 import './main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
+
 
 
 class Dashboard extends StatefulWidget{
+
+  
   @override
   State<Dashboard> createState() => new _State();
 }//state creation
@@ -96,7 +100,7 @@ class _State extends State<Dashboard>{
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset('assets/logo.jpg'),
-                          Container(padding: const EdgeInsets.all(8),alignment: Alignment.center,child: Text("Create\n notification",
+                          Container(padding: const EdgeInsets.all(8),alignment: Alignment.center,child: Text("    Create\n Notification",
                           style:TextStyle(
                             color: Colors.white
                           )),)
@@ -124,7 +128,7 @@ class _State extends State<Dashboard>{
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset('assets/logo.jpg'),
-                          Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text(" View\nnotification",
+                          Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("     View\nNotification",
                               style:TextStyle(
                                   color: Colors.white
                               )),)
@@ -152,7 +156,36 @@ class _State extends State<Dashboard>{
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset('assets/logo.jpg'),
-                          Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("Work Orders",
+                          Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("       View\nWork Orders",
+                              style:TextStyle(
+                                  color: Colors.white
+                              )),)
+                        ],
+                      ),
+                    )
+                    ),
+                  ),
+                  Container(
+                    //   height: 150,
+                    // width:150,
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(10),
+                    child:GestureDetector(
+                      onTap:()async{
+                        print(logger);
+                        Navigator.pushNamed(context, '/cwo');
+                      },
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      color: Colors.blue,
+                      elevation: 10,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/logo.jpg'),
+                          Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("    Create\nWork order",
                               style:TextStyle(
                                   color: Colors.white
                               )),)
@@ -166,6 +199,11 @@ class _State extends State<Dashboard>{
                    // width:150,
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(10),
+                    child:GestureDetector(
+                      onTap:()async{
+                        print(logger);
+                        Navigator.pushNamed(context, '/slog');
+                      },
                     child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
@@ -182,7 +220,8 @@ class _State extends State<Dashboard>{
                               )),)
                         ],
                       ),
-                    ),
+                    )
+                  ),
                   ),
                   Container(
                     //height: 350,
@@ -192,11 +231,11 @@ class _State extends State<Dashboard>{
                     child:GestureDetector(
                       onTap:()async{
                         print(logger);
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
-                        prefs.setString("user", '');
-                        print('logout!! cleared previous token');
+                        //SharedPreferences prefs = await SharedPreferences.getInstance();
+                        //prefs.setString("user", '');
+                        //print('logout!! cleared previous token');
                         //await LocalStorage('localstorage_app').setItem('user', '');
-                        Navigator.pushReplacementNamed(context, '/login');
+                        Navigator.pushReplacementNamed(context, '/logout');
                       },
                     child: Card(
                       shape: RoundedRectangleBorder(
@@ -217,51 +256,21 @@ class _State extends State<Dashboard>{
                     ),
                     ),
                   ),
-                  Container(
-                    //   height: 150,
-                    // width:150,
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(10),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      color: Colors.blue,
-                      elevation: 10,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/logo.jpg'),
-                          Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("Logged in as\n$logger",
-                              style:TextStyle(
-                                  color: Colors.white
-                              )),)
-                        ],
-                      ),
-                    ),
-                  ),
+                  
 
 
                 ],
               )
             ),
             //htiles5
-            Container(
-              child:MaterialButton(
-                padding: EdgeInsets.all(10),
-                child:Text('print from local'),
-              color: Colors.blue,
-              textColor: Colors.white,
-              onPressed:()=> _showtoast(context),
-              )
-            ),//cheacking
+            //cheacking
           ],
         ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
           child: Text(
-            "Powered by Firebase. \nCopyright ©2021, All Rights Reserved.\n",
+            "Current User Id : $logger\nPowered by Firebase. \nCopyright ©2021, All Rights Reserved.",
             textAlign: TextAlign.center,
           ),
           color: Colors.blueAccent

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import './main.dart';
+import './sessionlog.dart';
 
 
 class Breakdown extends StatefulWidget{
@@ -11,6 +12,24 @@ class Breakdown extends StatefulWidget{
 
 class _State extends State<Breakdown>{
 
+
+  Future<void> sendnoti(String temps)async{
+    var uri =  Uri.parse("$baseUrl/sendnoti");
+    try{
+      final response = await http.post(uri,
+        headers: <String,String>{
+         'Content-Type':'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String,String>{
+          "fcmtoken":'$fcm',
+          "title" : "Created Breakdown Notification",
+           "message":"Created by:$sessionuser - $temps"
+
+          }),
+      );
+    }catch(error){print(error);}
+
+  }
 
 httpcall() async {
    // print('$name, from function $pass');
@@ -64,6 +83,9 @@ httpcall() async {
         var temps = resp["status"]["LV_NOTIFICATION"]["_text"];
         print(temps);
         var temp = int.parse(temps);
+        Logs ldata = Logs('Created a Breakdown Notification Number is : $temp');
+        sessionlog.add(ldata);
+        sendnoti('Created Notification Number is : $temp');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Created Notification Number is : $temp')));
       }
       else{
@@ -302,12 +324,6 @@ httpcall() async {
                       borderSide: new BorderSide(),
                     ),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter breakdown ending date';
-                    }
-                    return null;
-                  },
                 )
               ),
               Padding(
@@ -324,14 +340,9 @@ httpcall() async {
                       borderSide: new BorderSide(),
                     ),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter breakdown end time';
-                    }
-                    return null;
-                  },
                 )
               ),
+              
               Padding(
                 padding: EdgeInsets.all(10),
                 child: TextFormField(

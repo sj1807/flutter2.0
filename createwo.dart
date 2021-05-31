@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import './main.dart';
+import './sessionlog.dart';
 
 
 class Cworkorder extends StatefulWidget{
@@ -11,6 +12,24 @@ class Cworkorder extends StatefulWidget{
 
 class _State extends State<Cworkorder>{
 
+        Future<void> sendnoti(String temps)async{
+          var uri =  Uri.parse("$baseUrl/sendnoti");
+          try{
+            final response = await http.post(uri,
+              headers: <String,String>{
+                'Content-Type':'application/json; charset=UTF-8',
+              },
+              body: jsonEncode(<String,String>{
+                "fcmtoken":'$fcm',
+                "title" : "Created WorkOrder",
+                "message":"Created by:$sessionuser - $temps"
+
+              }),
+            );
+
+          }catch(error){print(error);}
+
+        }
 
 httpcall() async {
    // print('$name, from function $pass');
@@ -54,7 +73,11 @@ httpcall() async {
       if(resp["status"]!=null){
         print("ok user");
         var temps = resp["status"]["MESSAGE"]["_text"];
+        Logs ldata = Logs('$temps');
+        sessionlog.add(ldata);
+        sendnoti(temps);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$temps')));
+
       }
       else{
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Creation error verify your datas')));
@@ -129,8 +152,8 @@ httpcall() async {
                     },
                     items: <String>[
                       'Grinding Machine',
-                      'CNC Machine',
-                      'UT Compressor',
+      //                'CNC Machine',
+    //                  'UT Compressor',
                       'Screw Guage'
                     ].map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
@@ -405,7 +428,7 @@ httpcall() async {
             title: new Text("Home"),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings,color: Color.fromRGBO(5, 5, 220, 100),),
+            icon: Icon(Icons.reorder,color: Color.fromRGBO(5, 5, 220, 100),),
             title: new Text("View Workorders")
           )
         ],

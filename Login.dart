@@ -46,7 +46,10 @@ class _State extends State<LoginPage>{
     }
 
     catch(error){
+        _showtoast(context, "Server error");
+
       print(error);
+
     }
   }
    
@@ -99,7 +102,6 @@ class _State extends State<LoginPage>{
               padding: EdgeInsets.all(10),
               child: TextField(
                 controller: nameController,
-                keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'User Id',
@@ -112,6 +114,9 @@ class _State extends State<LoginPage>{
               padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
               child: TextField(
                 controller: passwordController,
+                autofocus: false,
+                obscureText: true,
+
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Password',
@@ -127,10 +132,15 @@ class _State extends State<LoginPage>{
                   color: Colors.blue,
                   child: Text('Login'),
                   onPressed:(){
+
                     if(nameController.text=="" || passwordController.text ==""){
                       _showtoast(context, "Enter a valid usename and password");
                     }else{
+                    _showtoast(context, "Processing Credentials");
+
                       httplogin(nameController.text,passwordController.text);
+       
+
                     } 
                   },//press
                 )

@@ -6,12 +6,14 @@ import './main.dart';
 import 'package:http/http.dart' as http;
 
 
-class VBreakdown extends StatefulWidget{
+class Vfunnoti extends StatefulWidget{
+  final String func;
+  Vfunnoti(this.func);
   @override
-  State<VBreakdown> createState() => new _State();
+  State<Vfunnoti> createState() => new _State();
 }
 
-class _State extends State<VBreakdown>{
+class _State extends State<Vfunnoti>{
  // String bndate;
 
     String removezero(String a){
@@ -22,6 +24,14 @@ class _State extends State<VBreakdown>{
   TextEditingController dateController = TextEditingController();
 
   Future<List<Notification>> httpcall(String user, String date) async {
+    var tempo;
+    switch(widget.func){
+      case "GEC Mechanical Works":{tempo="GEC-MECH";}break;
+      case "Production Block1":{tempo="CNS1-PL2-SM";}break;
+      case "Steel Melt Shop" :{tempo="4000-300";}break;
+      case "Instrument Maintenance":{tempo="SCREW-GAUAGE";}break;
+      default:{tempo="GEC-MECH";}
+    }
 
     print('$user, fselected date $date');
     var uri =  Uri.parse("$baseUrl/pm/notilist");
@@ -32,9 +42,10 @@ class _State extends State<VBreakdown>{
       },
       body:
           jsonEncode(<String,String>{
-            'user' : '$user',
+            'location' : '$tempo',
+
             'date' : '$date',
-            'selection' : '1'
+            'selection' : '2'
           }),
       );
       //print(response.body);
@@ -90,7 +101,7 @@ class _State extends State<VBreakdown>{
     return Scaffold(
       resizeToAvoidBottomInset: false ,
       appBar: AppBar(
-        title: Text('View Notification',
+        title: Text('View Location Notification',
             style: TextStyle(
                 fontSize: 15
             )),
@@ -148,12 +159,12 @@ class _State extends State<VBreakdown>{
         type: BottomNavigationBarType.fixed,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications,color: Color.fromRGBO(220, 5, 5, 100),),
-            title: new Text("Your notification"),
+            icon: Icon(Icons.location_on,color: Color.fromRGBO(220, 5, 5, 100),),
+            title: new Text("Location notifications"),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
-            title: new Text("Location Notifications")
+            icon: Icon(Icons.notifications),
+            title: new Text("Your Notifications")
           )
         ],
         onTap: (index){
@@ -162,7 +173,7 @@ class _State extends State<VBreakdown>{
             //Navigator.pushReplacementNamed(context, '/selntoi');
           }
           if(index == 1){
-            Navigator.pushNamed(context, '/selnoti');
+            Navigator.pushNamed(context, '/vbnote');
           }
         },
       ),
