@@ -8,18 +8,25 @@ import './changenotistatus.dart';
 import 'package:http/http.dart' as http;
 import './changenotif.dart';
 
-
-
-class Detailednote extends StatelessWidget{
+class Detailednote extends StatefulWidget{
   final String notinum;
   Detailednote(this.notinum);
+
+  
+  @override
+  State<Detailednote> createState() => new _State();
+}
+
+class _State extends State<Detailednote>{
+  
+   bool expanded = false;
     @override
 
   Widget build(BuildContext context){
     return Scaffold(
       resizeToAvoidBottomInset: false ,
       appBar: AppBar(
-        title: Text('Detailed Notification - '+ removezero(notinum),
+        title: Text('Detailed Notification - '+ removezero(widget.notinum),
             style: TextStyle(
                 fontSize: 15
             )
@@ -28,7 +35,7 @@ class Detailednote extends StatelessWidget{
       body: Scrollbar(
         child: Container(
           child: FutureBuilder(
-            future: httpcall(notinum),
+            future: httpcall(widget.notinum),
             builder: (BuildContext context, AsyncSnapshot snapshot){
               if(snapshot.data == null){
                 return Container(
@@ -60,7 +67,7 @@ class Detailednote extends StatelessWidget{
                           text:TextSpan(
                           children : <TextSpan>[
                             TextSpan(text : 'Notification Number : ',style : TextStyle(color: Colors.black)),
-                            TextSpan(text : removezero(notinum), style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold)),
+                            TextSpan(text : removezero(widget.notinum), style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold)),
                           ],
                         ),
                         )
@@ -69,6 +76,15 @@ class Detailednote extends StatelessWidget{
                     ),
                     Container(
                       child: Divider(color: Colors.black,height: 50,),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Text('Notifiation Header :',
+                        style: TextStyle(
+                          fontSize:18,fontWeight: FontWeight.bold
+                        ),
+                      ),
                     ),
                     Container(
                       padding: EdgeInsets.all(5),
@@ -108,7 +124,7 @@ class Detailednote extends StatelessWidget{
                     Container(
                       child: Divider(color: Colors.black,height: 50,),
                     ), 
-                    Container(
+  /*                  Container(
                       padding: EdgeInsets.all(10),
                       margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                       child: Text('More Details :',
@@ -216,7 +232,146 @@ class Detailednote extends StatelessWidget{
                     ),
                     Container(
                       child: Divider(color: Colors.black,height: 50,),
+                    ), */
+                    Container(
+                      child: ExpansionPanelList(
+                      animationDuration: Duration(milliseconds:1000),
+                      dividerColor:Colors.red,
+                      elevation:1,
+                    children: [
+                      ExpansionPanel(
+                      body: Container(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment:CrossAxisAlignment.start,
+                      children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                        child: RichText(
+                          text:TextSpan(
+                          children:<TextSpan>[
+                            TextSpan(text: '\u{25AA}Requested Start \n     Date/Time          :  ',style: TextStyle(color:Colors.black)),
+                            TextSpan(text: snapshot.data[0].mstart+' / '+snapshot.data[0].mstarttime,style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold)),
+                            TextSpan(text: '\n\u{25AA}Requested End \n     Date/Time          :  ',style: TextStyle(color:Colors.black)),
+                            TextSpan(text: snapshot.data[0].mend +' / '+snapshot.data[0].mendtime,style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold)),
+                          ]
+                        )
+                      )
+                      //Text('The notification is created from the company'+snapshot.data[0].company+' in the plant ' ),
                     ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: RichText(
+                        text:TextSpan(
+                          children:<TextSpan>[
+                            TextSpan(text: '\u{25AA}Breakdown Start \n     Date/Time          :  ',style: TextStyle(color:Colors.black)),
+                            TextSpan(text: snapshot.data[0].bstart+' / '+snapshot.data[0].bstarttime,style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold)),
+                            TextSpan(text: '\n\u{25AA}Breakdown End \n     Date/Time          :  ',style: TextStyle(color:Colors.black)),
+                            TextSpan(text: snapshot.data[0].bend +' / '+snapshot.data[0].bendtime,style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold)),
+                          ]
+                        )
+                      )
+                      //Text('The notification is created from the company'+snapshot.data[0].company+' in the plant ' ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: RichText(text: TextSpan(
+                        children:<TextSpan>[
+                          TextSpan(text: '\u{25AA}Detailed Description : ',style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold)),
+                          TextSpan(text: snapshot.data[0].detailed,style: TextStyle(color:Colors.black)),
+
+                        ]
+                      ))
+                      //Text(+ ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: RichText(
+                        text:TextSpan(
+                          children:<TextSpan>[
+                            TextSpan(text: '\u{25AA}The notification is created for the company : ',style: TextStyle(color:Colors.black)),
+                            TextSpan(text: snapshot.data[0].company,style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold)),
+                            TextSpan(text: ' in the plant ',style: TextStyle(color:Colors.black)),
+                            TextSpan(text: snapshot.data[0].plant,style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold)),
+                          ]
+                        )
+                      )
+                      //Text('The notification is created from the company'+snapshot.data[0].company+' in the plant ' ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: RichText(
+                        text: TextSpan(
+                          children:<TextSpan>[
+                            TextSpan(text: '\u{25AA}The workcenter and Functional location for this notification is ',style: TextStyle(color:Colors.black)),
+                            TextSpan(text:snapshot.data[0].workcenter +' and '+snapshot.data[0].functional,style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold)),
+
+                          ]
+                        ),
+                      )//Text('The workcenter and Functional location for this notification is'+ ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: RichText(
+                        text: TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(text:'\u{25AA}This Notification is raised by ',style: TextStyle(color:Colors.black) ),
+                            TextSpan(text:snapshot.data[0].reportedby+' and ',style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold )),
+                            TextSpan(text:'the person responsible is ',style: TextStyle(color:Colors.black)),
+                            TextSpan(text:snapshot.data[0].partner,style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold )),
+                          ]
+                        )
+                        )
+                      //Text('This Notification is raised by '+snapshot.data[0].reportedby++ ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: RichText(text: TextSpan(
+                        children:<TextSpan>[
+                          TextSpan(text: '\u{25AA}Workorder for this notification is ',style: TextStyle(color:Colors.black)),
+                          TextSpan(text: snapshot.data[0].number,style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold)),
+
+                        ]
+                      ))
+                      //Text(+ ),
+                    ),
+                    Container(
+                      child: Divider(color: Colors.black,height: 50,),
+                    ),
+
+                  ],
+                ),
+              ),
+            headerBuilder: (BuildContext context, bool isExpanded) {
+              return Container(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                "More Details",
+                style: TextStyle(
+                  fontSize:18,fontWeight: FontWeight.bold
+                ),
+              ),
+            );
+            },
+            isExpanded: expanded,
+            )
+          ],
+          expansionCallback: (int item, bool status) {
+            setState(() {
+              expanded =
+              !expanded;
+            });
+          },
+        ),
+                    )
                   ]
                 );
               }
@@ -249,7 +404,7 @@ class Detailednote extends StatelessWidget{
               String tempe = detailssender[0].status;
               print('status'+tempe);
               if(tempe.contains('OSNO')||tempe.contains('NOPR')||tempe.contains('InProgress')||tempe.contains('Outstanding')){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Changenotif(detailssender,notinum),
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Changenotif(detailssender,widget.notinum),
               ),);
               }else{
               
@@ -267,7 +422,7 @@ class Detailednote extends StatelessWidget{
 
               //Navigator.pushReplacementNamed(context, '/vbnote');
               }else{
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Changenotis(notinum),
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>Changenotis(widget.notinum),
               ),);
               }
             }

@@ -7,17 +7,27 @@ import './main.dart';
 import 'package:http/http.dart' as http;
 import './changewo.dart';
 
-
-class Detailedwo extends StatelessWidget{
+class Detailedwo extends StatefulWidget{
   final String wonum;
   Detailedwo(this.wonum);
+  
+  @override
+  State<Detailedwo> createState() => new _State();
+}
+
+class _State extends State<Detailedwo>{
+
+   bool expanded = false;
+   bool mexpanded = false;
+   bool aexpanded = false;
+
     @override
 
   Widget build(BuildContext context){
     return Scaffold(
       resizeToAvoidBottomInset: false ,
       appBar: AppBar(
-        title: Text('Detailed Workorder - '+ removezero(wonum),
+        title: Text('Detailed Workorder - '+ removezero(widget.wonum),
             style: TextStyle(
                 fontSize: 15
             )
@@ -26,7 +36,7 @@ class Detailedwo extends StatelessWidget{
       body: Scrollbar(
         child: Container(
           child: FutureBuilder(
-            future: httpcall(wonum),
+            future: httpcall(widget.wonum),
             builder: (BuildContext context, AsyncSnapshot snapshot){
               if(snapshot.data == null){
                 return Container(
@@ -58,7 +68,7 @@ class Detailedwo extends StatelessWidget{
                           text:TextSpan(
                           children : <TextSpan>[
                             TextSpan(text : 'WorkOrder Number : ',style : TextStyle(color: Colors.black)),
-                            TextSpan(text : removezero(wonum), style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold)),
+                            TextSpan(text : removezero(widget.wonum), style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold)),
                           ],
                         ),
                         )
@@ -67,6 +77,15 @@ class Detailedwo extends StatelessWidget{
                     ),
                     Container(
                       child: Divider(color: Colors.black,height: 50,),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Text('Order Header :',
+                        style: TextStyle(
+                          fontSize:18,fontWeight: FontWeight.bold
+                        ),
+                      ),
                     ),
                     Container(
                       padding: EdgeInsets.all(5),
@@ -106,7 +125,7 @@ class Detailedwo extends StatelessWidget{
                     Container(
                       child: Divider(color: Colors.black,height: 50,),
                     ),
-                    Container(
+                /*    Container(
                       padding: EdgeInsets.all(10),
                       margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                       child: Text('Order Operation Details :',
@@ -114,8 +133,34 @@ class Detailedwo extends StatelessWidget{
                           fontSize:18,fontWeight: FontWeight.bold
                         ),
                       ),
+                    ), */
+                    
+                 /*   Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Text('Material Requirement Details :',
+                        style: TextStyle(
+                          fontSize:18,fontWeight: FontWeight.bold
+                        ),
+                      ),
                     ),
+                  */  
+                    
+                    
                     Container(
+                      child: ExpansionPanelList(
+  animationDuration: Duration(milliseconds:1000),
+  dividerColor:Colors.red,
+  elevation:1,
+  children: [
+    ExpansionPanel(
+      body: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment:CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
                       padding: EdgeInsets.all(10),
                       margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
                       child: RichText(
@@ -148,15 +193,51 @@ class Detailedwo extends StatelessWidget{
                     Container(
                       child: Divider(color: Colors.black,height: 50,),
                     ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: Text('Material Requirement Details :',
-                        style: TextStyle(
-                          fontSize:18,fontWeight: FontWeight.bold
-                        ),
-                      ),
+
+            SizedBox(height:30,),
+
+
+           
+
+          ],
+        ),
+      ),
+      headerBuilder: (BuildContext context, bool isExpanded) {
+        return Container(
+          padding: EdgeInsets.all(10),
+          child: Text(
+            "Operation Details",
+            style: TextStyle(            
+              fontSize:18,fontWeight: FontWeight.bold
+            ),
+          ),
+        );
+      },
+      isExpanded: expanded,
+    )
+  ],
+  expansionCallback: (int item, bool status) {
+    setState(() {
+      expanded =
+      !expanded;
+    });
+  },
+),
                     ),
+                    Container(
+                      child: ExpansionPanelList(
+  animationDuration: Duration(milliseconds:1000),
+  dividerColor:Colors.red,
+  elevation:1,
+  children: [
+    ExpansionPanel(
+      body: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment:CrossAxisAlignment.start,
+          children: <Widget>[
+  
                     Container(
                       padding: EdgeInsets.all(5),
                       margin: EdgeInsets.fromLTRB(15, 0, 0, 0),
@@ -177,18 +258,54 @@ class Detailedwo extends StatelessWidget{
                     Container(
                       child: Divider(color: Colors.black,height: 50,),
                     ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: Text('Additional Operations ,if any :',
-                        style: TextStyle(
-                          fontSize:18,fontWeight: FontWeight.bold
-                        ),
-                      ),
+
+
+            SizedBox(height:30,),
+
+
+           
+
+          ],
+        ),
+      ),
+      headerBuilder: (BuildContext context, bool isExpanded) {
+        return Container(
+          padding: EdgeInsets.all(10),
+          child: Text(
+            "Material Requirement Details",
+            style: TextStyle(
+              fontSize:18,fontWeight: FontWeight.bold
+            ),
+          ),
+        );
+      },
+      isExpanded: mexpanded,
+    )
+  ],
+  expansionCallback: (int item, bool status) {
+    setState(() {
+      mexpanded =
+      !mexpanded;
+    });
+  },
+),
                     ),
                     Container(
-                      child: operation.length <1 ? 
-                      Text('           No additonal activities'):
+                      child: ExpansionPanelList(
+  animationDuration: Duration(milliseconds:1000),
+  dividerColor:Colors.red,
+  elevation:1,
+  children: [
+    ExpansionPanel(
+      body: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment:CrossAxisAlignment.start,
+          children: <Widget>[
+           Container(
+                      child: operation.length ==0 ? 
+                      Text('           No additional activities'):
                       ListView.builder(
                         shrinkWrap: true,
                         padding: EdgeInsets.all(15),
@@ -206,6 +323,38 @@ class Detailedwo extends StatelessWidget{
                     Container(
                       child: Divider(color: Colors.black,height: 50,),
                     ),
+
+
+            SizedBox(height:30,),
+
+
+           
+
+          ],
+        ),
+      ),
+      headerBuilder: (BuildContext context, bool isExpanded) {
+        return Container(
+          padding: EdgeInsets.all(10),
+          child: Text(
+            "Additional Operation ,if any",
+            style: TextStyle(
+              fontSize:18,fontWeight: FontWeight.bold
+            ),
+          ),
+        );
+      },
+      isExpanded: aexpanded,
+    )
+  ],
+  expansionCallback: (int item, bool status) {
+    setState(() {
+      aexpanded =
+      !aexpanded;
+    });
+  },
+),
+                    )
 
                   ]
                 );
@@ -235,7 +384,7 @@ class Detailedwo extends StatelessWidget{
             }
             if(index==1){
               if(sender[0].status.contains('Created')||sender[0].status.contains('CRTD')){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>Changewo(wonum,sender)
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Changewo(widget.wonum,sender)
               ),);
               }else{
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Cannot change closed or confirmed order')));

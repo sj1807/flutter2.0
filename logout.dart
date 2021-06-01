@@ -42,7 +42,7 @@ class _State extends State<Logout>{
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/logo.jpg'),
+                          Image.asset('assets/home.png'),
                           Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("No Go home",
                               style:TextStyle(
                                   color: Colors.white
@@ -74,7 +74,7 @@ class _State extends State<Logout>{
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/logo.jpg'),
+                          Image.asset('assets/logout.png'),
                           Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text(" Yes Logout",
                               style:TextStyle(
                                   color: Colors.white

@@ -18,12 +18,15 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 //import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import './createwo.dart';
 import './selctnotifunctions.dart';
+import './chatscreen.dart';
 
-var baseUrl = "https://5208b7ba6a96.ngrok.io";
+var baseUrl = "https://96fc6dc97140.ngrok.io";
 int logg=1;
 var sessionuser="";
 var fcm = '';
 String bdate = '2008-01-01';
+
+   
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async{
   await Firebase.initializeApp();
@@ -41,6 +44,7 @@ Future<void> main() async{
   String token = await _firebase.getToken();
   fcm = token;
   print(token);
+
 
   //const AndroidNotificationChannel
 
@@ -93,6 +97,8 @@ class MyApp extends StatelessWidget {
       '/cwo': (context) =>Cworkorder(),
       '/selnoti': (context) => Selectfunnoti(),
       '/logout': (context)=>Logout(),
+      '/chatbot': (context)=>ChatScreen(),
+
 
       //'/wosele' : (context)=>
       '/slog': (context) =>Sessionlog()

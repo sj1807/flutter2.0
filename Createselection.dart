@@ -41,7 +41,7 @@ class _State extends State<Cselection>{
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('assets/logo.jpg'),
+                        Image.asset('assets/breaknoti.jpg'),
                         Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("Create Breakdown\n   Notification",
                             style:TextStyle(
                                 color: Colors.white
@@ -70,8 +70,8 @@ class _State extends State<Cselection>{
                       mainAxisAlignment: MainAxisAlignment.center,
                       //width:15
                       children: [
-                        Image.asset('assets/logo.jpg'),
-                        Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("Create Maintenance\n   Notificaitons",
+                        Image.asset('assets/maintnotif.png'),
+                        Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("Create Preventive\n   Notificaitons",
                             style:TextStyle(
                                 color: Colors.white
                             )),)

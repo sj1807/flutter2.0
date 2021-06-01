@@ -29,7 +29,7 @@ class _State extends State<Changenotif>{
         body: jsonEncode(<String,String>{
           "fcmtoken":'$fcm',
           "title" : "Notification Changed ",
-           "message":"Created by:$sessionuser - $temps"
+           "message":"Changed by:$sessionuser - $temps"
 
           }),
       );

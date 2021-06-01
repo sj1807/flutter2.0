@@ -99,7 +99,7 @@ class _State extends State<Dashboard>{
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/logo.jpg'),
+                          Image.asset('assets/addicon.jpg'),
                           Container(padding: const EdgeInsets.all(8),alignment: Alignment.center,child: Text("    Create\n Notification",
                           style:TextStyle(
                             color: Colors.white
@@ -127,7 +127,7 @@ class _State extends State<Dashboard>{
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/logo.jpg'),
+                          Image.asset('assets/viewnotifs.jpg'),
                           Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("     View\nNotification",
                               style:TextStyle(
                                   color: Colors.white
@@ -155,7 +155,7 @@ class _State extends State<Dashboard>{
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/logo.jpg'),
+                          Image.asset('assets/woview.jpg'),
                           Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("       View\nWork Orders",
                               style:TextStyle(
                                   color: Colors.white
@@ -184,7 +184,7 @@ class _State extends State<Dashboard>{
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/logo.jpg'),
+                          Image.asset('assets/createwo.png'),
                           Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("    Create\nWork order",
                               style:TextStyle(
                                   color: Colors.white
@@ -213,7 +213,7 @@ class _State extends State<Dashboard>{
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/logo.jpg'),
+                          Image.asset('assets/log.png'),
                           Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("Session log",
                               style:TextStyle(
                                   color: Colors.white
@@ -246,7 +246,7 @@ class _State extends State<Dashboard>{
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/logo.jpg'),
+                          Image.asset('assets/logout.png'),
                           Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("Logout",
                               style:TextStyle(
                                   color: Colors.white
@@ -262,6 +262,21 @@ class _State extends State<Dashboard>{
                 ],
               )
             ),
+            Center(
+              child:Align(
+                alignment: Alignment(1,1),
+              child: FloatingActionButton(
+                child: Icon(Icons.message),
+                backgroundColor : Colors.green,
+                onPressed: (){
+                  Navigator.pushNamed(context, '/chatbot');
+                }
+              )
+              )
+            ), 
+
+
+            
             //htiles5
             //cheacking
           ],
