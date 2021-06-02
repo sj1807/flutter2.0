@@ -48,6 +48,13 @@ httpcall() async {
       if(location=='Production Block1'){lv_location="4000-300";}
       if(location=='Steel Melt Shop'){lv_location="CNS1-PL2-SM";}
       if(location=='Instrument Maintenance'){lv_location="SCREW_GUAGE";}
+      var lv_task = '';var lv_cause = '';
+      if(task.text!=''||task.text!=null || task.text != 'undefined'){
+        lv_task = task.text;
+      }
+      if(cause.text!=''||cause.text!=null || cause.text != 'undefined'){
+        lv_cause = cause.text;
+      }
 
 
       final response = await http.post(uri,
@@ -71,14 +78,16 @@ httpcall() async {
             'medate' : '',//enddate.text, //13
             'metime' : '',//endtime.text, //14
             'msdate' : '',//startdate.text, //15
-            'mstime' : '',//starttime.text, 
+            'mstime' : '',
+            'cause' : lv_cause,
+            'task' : lv_task,//starttime.text, 
             'type': 'B2'//16
 
           }),
       );
       final resp = jsonDecode(response.body);
       print(resp["status"]);
-      if(resp["status"]!=null){
+      if(resp["status"]["LV_NOTIFICATION"]["_text"]!=null){
         print("ok user");
         var temps = resp["status"]["LV_NOTIFICATION"]["_text"];
         print(temps);
@@ -111,6 +120,8 @@ httpcall() async {
   TextEditingController details = TextEditingController();
   TextEditingController reportedby = TextEditingController();
   TextEditingController person = TextEditingController();
+  TextEditingController cause = TextEditingController();
+  TextEditingController task = TextEditingController();
   String dropdownValue = 'Grinding Machine';
   String priority = 'High';
   String location = 'GEC Mechanical Works';
@@ -409,6 +420,37 @@ httpcall() async {
                     }
                     return null;
                   },
+                )
+              ),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: TextFormField(
+                  controller: cause,
+                  // The validator receives the text that the user has entered.
+                  decoration: new InputDecoration(
+                    labelText: "Cause",
+                    contentPadding: EdgeInsets.all(20.0),
+                    fillColor: Colors.white,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(10.0),
+                      borderSide: new BorderSide(),
+                    ),
+                  ),
+                )
+              ), Padding(
+                padding: EdgeInsets.all(10),
+                child: TextFormField(
+                  controller: task,
+                  // The validator receives the text that the user has entered.
+                  decoration: new InputDecoration(
+                    labelText: "Task",
+                    contentPadding: EdgeInsets.all(20.0),
+                    fillColor: Colors.white,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(10.0),
+                      borderSide: new BorderSide(),
+                    ),
+                  ),
                 )
               ),
 

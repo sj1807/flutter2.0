@@ -20,6 +20,9 @@ class Detailednote extends StatefulWidget{
 class _State extends State<Detailednote>{
   
    bool expanded = false;
+   bool cexpanded = false;
+   bool texpanded = false;
+
     @override
 
   Widget build(BuildContext context){
@@ -371,7 +374,130 @@ class _State extends State<Detailednote>{
             });
           },
         ),
+                    ),
+                    Container(
+                      child: ExpansionPanelList(
+  animationDuration: Duration(milliseconds:1000),
+  dividerColor:Colors.red,
+  elevation:1,
+  children: [
+    ExpansionPanel(
+      body: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment:CrossAxisAlignment.start,
+          children: <Widget>[
+           Container(
+                      child: cause.isEmpty ? 
+                      Text('           Loading...'):
+                      ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.all(15),
+                        physics: ClampingScrollPhysics(),
+                        itemCount: cause.length,
+                        itemBuilder: (BuildContext ctxt, int index){
+                          return new Text('\n\u{25AA}Cause: '+cause[index].causetext);
+                        })
+                    ),
+                    Container(
+                      child: Divider(color: Colors.black,height: 50,),
+                    ),
+
+
+            SizedBox(height:30,),
+
+
+           
+
+          ],
+        ),
+      ),
+      headerBuilder: (BuildContext context, bool isExpanded) {
+        return Container(
+          padding: EdgeInsets.all(10),
+          child: Text(
+            "Cause details",
+            style: TextStyle(
+              fontSize:18,fontWeight: FontWeight.bold
+            ),
+          ),
+        );
+      },
+      isExpanded: cexpanded,
+    )
+  ],
+  expansionCallback: (int item, bool status) {
+    setState(() {
+      cexpanded =
+      !cexpanded;
+    });
+  },
+),
+                    ),
+                    Container(
+                      child: ExpansionPanelList(
+  animationDuration: Duration(milliseconds:1000),
+  dividerColor:Colors.red,
+  elevation:1,
+  children: [
+    ExpansionPanel(
+      body: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment:CrossAxisAlignment.start,
+          children: <Widget>[
+           Container(
+                      child: tasks.isEmpty ? 
+                      Text('           Loading...'):
+                      ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.all(15),
+                        physics: ClampingScrollPhysics(),
+                        itemCount: tasks.length,
+                        itemBuilder: (BuildContext ctxt, int index){
+                          return new Text('\n\u{25AA}Task: '+tasks[index].tasktext+
+                          '\n\u{25AA} Task status: '+tasks[index].taskStatus);
+                        })
+                    ),
+                    Container(
+                      child: Divider(color: Colors.black,height: 50,),
+                    ),
+
+
+            SizedBox(height:30,),
+
+
+           
+
+          ],
+        ),
+      ),
+      headerBuilder: (BuildContext context, bool isExpanded) {
+        return Container(
+          padding: EdgeInsets.all(10),
+          child: Text(
+            "Task details",
+            style: TextStyle(
+              fontSize:18,fontWeight: FontWeight.bold
+            ),
+          ),
+        );
+      },
+      isExpanded: texpanded,
+    )
+  ],
+  expansionCallback: (int item, bool status) {
+    setState(() {
+      texpanded =
+      !texpanded;
+    });
+  },
+),
                     )
+
+
                   ]
                 );
               }
@@ -416,7 +542,7 @@ class _State extends State<Detailednote>{
             if(index==1){
               String tempe = detailssender[0].status;
               print('status'+tempe);
-              if(tempe.contains('ONCO')||tempe.contains('Closed')){
+              if(tempe.contains('NOCO')||tempe.contains('Closed')){
   
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Cannot change closed notifications status')));
 
@@ -435,7 +561,17 @@ class _State extends State<Detailednote>{
 
   }
 }
-
+List <Cause> cause = [];
+List <Task> tasks =[];
+class Cause{
+  final String causetext;
+  Cause(this.causetext);
+}
+class Task{
+  final String tasktext;
+  final String taskStatus;
+  Task(this.tasktext,this.taskStatus);
+}
 class Notificationdetails{
   final String number; //a
   final String type; //b
@@ -471,6 +607,8 @@ List <Notificationdetails> detailssender=[];
 
  Future<List<Notificationdetails>> httpcall(String number) async {
    detailssender.clear();
+   tasks.clear();
+   cause.clear();
     print('$number is selected');
     var uri =  Uri.parse("$baseUrl/pm/notidetails");
     try{
@@ -496,6 +634,11 @@ List <Notificationdetails> detailssender=[];
         var h="";var i="NA";var j="NA";var k="NA";var l="NA";var m="NA";var n="0";
         var o = "na";var p = "na";var q = "na";var r = "na";var s = "no";var t = "breakdown";var u = "no";
         var v = "breakdown";var w ="na";var x="na";
+        var cau = "na"; var tas = "na" ; var tasst = "na";
+
+
+
+
         if(temp["COMPANY"]["_text"]!=null){i=temp["COMPANY"]["_text"] ;}//1
         if(temp["PRIORITY"]["_text"]!=null){d=temp["PRIORITY"]["_text"] ;}//2
         if(temp["PLANT"]["_text"]!=null){j=temp["PLANT"]["_text"] ;}//3
@@ -511,8 +654,13 @@ List <Notificationdetails> detailssender=[];
             case 'NOPR':{c="InProgress";}break;
             case 'NOCO':{c="Closed";}break;
             case 'NOPO':{c="Postponed";}break;
-            default :{c=temp["HEADER"]["SYS_STATUS"]["_text"];}break;
-
+            default :{
+              if(temp["HEADER"]["SYS_STATUS"]["_text"].contains('OSNO')){c="Outstanding";}
+              else if(temp["HEADER"]["SYS_STATUS"]["_text"].contains('NOPR')){c="InProgress";}
+              else if(temp["HEADER"]["SYS_STATUS"]["_text"].contains('NOCO')){c="Closed";}
+              else if(temp["HEADER"]["SYS_STATUS"]["_text"].contains('NOPO')){c="Postponed";}
+              else{c=temp["HEADER"]["SYS_STATUS"]["_text"];}break;}
+            
           }
         }//9
         if(temp["HEADERTEXT"]["WORK_CNTR"]["_text"]!=null){k=temp["HEADERTEXT"]["WORK_CNTR"]["_text"] ;}//10
@@ -550,6 +698,56 @@ List <Notificationdetails> detailssender=[];
             h+= items["TEXT_LINE"]["_text"];
           }
         }
+        
+        if(temp["CAUSE"]["item"]!=null){
+          try{
+            for (var items in temp["CAUSE"]["item"]){
+           // print(items["TEXT_LINE"]["_text"]);
+           if(items["CAUSETEXT"]["_text"]!=null){
+            cau= items["CAUSETEXT"]["_text"];
+            Cause cdata = Cause(cau);
+            cause.add(cdata);
+            }
+          }
+          }catch(e){
+            if(temp["CAUSE"]["item"]["CAUSETEXT"]["_text"]!=null){
+            cau= temp["CAUSE"]["item"]["CAUSETEXT"]["_text"];
+            Cause cdata = Cause(cau);
+            cause.add(cdata);
+            } 
+          }
+        }else{Cause cdata = Cause(cau);
+            cause.add(cdata);}
+        
+        if(temp["TASKS"]["item"]!=null){
+          try{
+            for (var items in temp["TASKS"]["item"]){
+           // print(items["TEXT_LINE"]["_text"]);
+           if(items["TASK_TEXT"]["_text"]!=null){
+            tas= items["TASK_TEXT"]["_text"];
+            }
+            if(items["STATUS"]["_text"]!=null){
+            tasst= items["STATUS"]["_text"];
+            }
+            print(tas+tasst);
+            Task tdata = Task(tas, tasst);
+            tasks.add(tdata);
+          }
+          }catch(e){
+            if(temp["TASKS"]["item"]["TASK_TEXT"]["_text"]!=null){
+            tas= temp["TASKS"]["item"]["TASK_TEXT"]["_text"];
+            }
+            if(temp["TASKS"]["item"]["STATUS"]["_text"]!=null){
+            tasst= temp["TASKS"]["item"]["STATUS"]["_text"];
+            }
+            print(tas+tasst);
+            Task tdata = Task(tas, tasst);
+            tasks.add(tdata); 
+          }
+        }else{Task tdata = Task(tas, tasst);
+            tasks.add(tdata);}
+
+
 
 
 
