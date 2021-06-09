@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import './main.dart';
 import './sessionlog.dart';
+import './wofromnotification.dart';
 
 
 class MBreakdown extends StatefulWidget{
@@ -12,7 +13,7 @@ class MBreakdown extends StatefulWidget{
 
 class _State extends State<MBreakdown>{
 
-
+var notifno;
   Future<void> sendnoti(String temps)async{
     var uri =  Uri.parse("$baseUrl/sendnoti");
     try{
@@ -22,7 +23,7 @@ class _State extends State<MBreakdown>{
         },
         body: jsonEncode(<String,String>{
           "fcmtoken":'$fcm',
-          "title" : "Created Maintenance Notification",
+          "title" : "Created Preventive Notification",
            "message":"Created by:$sessionuser - $temps"
 
           }),
@@ -94,6 +95,7 @@ httpcall() async {
         Logs ldata = Logs('Created a Maintenance Notification Number is : $temp');
         sessionlog.add(ldata);
         sendnoti('Created Notification Number is : $temp');
+        this.notifno = temp;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Created Notification Number is : $temp')));
       }
       else{
@@ -104,6 +106,8 @@ httpcall() async {
   }
    catch(error){
       print(error);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Server error')));
+
     }
   }
 
@@ -470,20 +474,7 @@ httpcall() async {
                     final valid = _formKey.currentState!.validate();
                     print(valid);
                     if (valid) {
-                    //if (true) {
-                      // If the form is valid, display a snackbar. In the real world,
-                      // you'd often call a server or save the information in a database.
-                     // print(functional.text);
-                      print("printing in this order");
-                      print(shortnote.text);
-                      print(startdate.text);
-                      print(enddate.text);
-                      print(starttime.text);
-                      print(endtime.text);
-                      print(details.text);
-                      print(reportedby.text);
-                      print(person.text);
-                      print(priority);
+
                       if(priority=="Medium"){
                         print(1);
                       }
@@ -495,6 +486,27 @@ httpcall() async {
                   child: Text('Submit'),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Validate returns true if the form is valid, or false otherwise.
+                    print("notif valur ${this.notifno}");
+                    if (notifno == null || notifno == 'undefined') {
+
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Create a notification first')));
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Redirecting Data')));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Cnworkorder(notifno),
+                      ),);
+
+                    }
+
+                  },
+                  child: Text('Create Corresponding Workorder'),
+                ),
+              ),
+
 
             ],
           ),

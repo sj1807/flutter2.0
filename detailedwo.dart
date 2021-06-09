@@ -116,6 +116,8 @@ class _State extends State<Detailedwo>{
                             TextSpan(text:snapshot.data[0].orderdate,style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold ) ),
                             TextSpan(text:'\n\nChange date : ',style: TextStyle(color:Colors.black) ),
                             TextSpan(text:snapshot.data[0].changedate,style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold )),
+                            TextSpan(text:'\n\nCorresponding Notification No : ',style: TextStyle(color:Colors.black) ),
+                            TextSpan(text:snapshot.data[0].number,style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold )),
                             
                           ],
                         ),

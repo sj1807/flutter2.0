@@ -9,7 +9,7 @@ class Selectfunnoti extends StatefulWidget{
 
 class _State extends State<Selectfunnoti> {
 
-  String location = 'GEC Mechanical Works';
+  String location = 'General Electric M1 Plant';
   @override
 
   Widget build(BuildContext context){
@@ -31,7 +31,7 @@ class _State extends State<Selectfunnoti> {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.all(1),
-              child: Text("         Select Functional Location to view notification"),
+              child: Text("         Select Plant to view notification"),
             ),
             Padding(
               padding: EdgeInsets.all(10),
@@ -53,10 +53,9 @@ class _State extends State<Selectfunnoti> {
                     print(location);
                 },
                 items: <String>[
-                  'GEC Mechanical Works',
-                  'Production Block1',
-                  'Steel Melt Shop',
-                  'Instrument Maintenance'    
+                  'General Electric M1 Plant',
+                  'General Electric C1 Plant',
+                      
                 ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                     value: value,

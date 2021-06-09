@@ -26,11 +26,9 @@ class _State extends State<Vfunnoti>{
   Future<List<Notification>> httpcall(String user, String date) async {
     var tempo;
     switch(widget.func){
-      case "GEC Mechanical Works":{tempo="GEC-MECH";}break;
-      case "Production Block1":{tempo="CNS1-PL2-SM";}break;
-      case "Steel Melt Shop" :{tempo="4000-300";}break;
-      case "Instrument Maintenance":{tempo="SCREW-GAUAGE";}break;
-      default:{tempo="GEC-MECH";}
+      case "General Electric M1 Plant":{tempo="GEM1";}break;
+      case "General Electric C1 Plant":{tempo="GEC1";}break;
+      default:{tempo="GEC1";}
     }
 
     print('$user, fselected date $date');

@@ -23,11 +23,10 @@ class Viewwo extends StatelessWidget{
     print('$loca, selected location');
     var tempo;
     switch(loca){
-      case "GEC Mechanical Works":{tempo="GEC-MECH";}break;
-      case "Production Block1":{tempo="CNS1-PL2-SM";}break;
-      case "Steel Melt Shop" :{tempo="4000-300";}break;
-      case "Instrument Maintenance":{tempo="SCREW-GAUAGE";}break;
-      default:{tempo="GEC-MECH";}
+      case "General Electric M1 Plant":{tempo="GEM1";}break;
+      case "General Electric C1 Plant":{tempo="GEC1";}break;
+      
+      default:{tempo="GEC1";}
     }
     print("$tempo converted to ");
     var uri =  Uri.parse("$baseUrl/pm/wolist");
