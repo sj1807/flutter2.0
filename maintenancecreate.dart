@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import './main.dart';
 import './sessionlog.dart';
 import './wofromnotification.dart';
+import 'package:intl/intl.dart';
 
 
 class MBreakdown extends StatefulWidget{
@@ -12,7 +13,10 @@ class MBreakdown extends StatefulWidget{
 }
 
 class _State extends State<MBreakdown>{
-
+DateTime strdate = DateTime.now();
+DateTime eddate = DateTime.now();
+TimeOfDay strtime = TimeOfDay.now();
+TimeOfDay edtime = TimeOfDay.now();
 var notifno;
   Future<void> sendnoti(String temps)async{
     var uri =  Uri.parse("$baseUrl/sendnoti");
@@ -286,6 +290,27 @@ httpcall() async {
                   // The validator receives the text that the user has entered.
                   decoration: new InputDecoration(
                     labelText: "Required Start Date",
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.calendar_today),
+                      onPressed: () async{
+                    DateTime? date;
+                    date =  await showDatePicker(
+                      context : context,
+                      firstDate : DateTime(DateTime.now().year-10),
+                      lastDate : DateTime(DateTime.now().year+1),
+                      initialDate: DateTime.now(),
+                    );
+                    if(date != null ){
+                      var lvdate = DateFormat("yyyy-MM-dd").format(date);
+                  //    print (lvdate);
+                      setState((){
+                         
+                          startdate.text = lvdate;
+
+                      });
+                    }
+                  } ,
+                    ),
                     contentPadding: EdgeInsets.all(20.0),
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
@@ -299,6 +324,8 @@ httpcall() async {
                     }
                     return null;
                   },
+                  
+                  
                 )
               ),
               Padding(
@@ -308,6 +335,24 @@ httpcall() async {
                   // The validator receives the text that the user has entered.
                   decoration: new InputDecoration(
                     labelText: "Required Start Time",
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.watch_later_rounded),
+                      onPressed: () async{
+                    TimeOfDay? time;
+                    time =  await showTimePicker(
+                      context : context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    if(time != null ){
+                      final now = new DateTime.now();
+                      final dt = DateTime(now.year,now.month,now.day,time.hour,time.minute);
+                      final format = DateFormat("HH:mm:ss").format(dt);
+                     print (time);
+                      setState((){
+                          starttime.text = format;
+                      });
+                    }
+                  } ),
                     contentPadding: EdgeInsets.all(20.0),
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
@@ -327,9 +372,31 @@ httpcall() async {
                 padding: EdgeInsets.all(10),
                 child: TextFormField(
                   controller: enddate,
+                  
                   // The validator receives the text that the user has entered.
                   decoration: new InputDecoration(
                     labelText: "Required End Date",
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.calendar_today),
+                      onPressed: () async{
+                    DateTime? date;
+                    date =  await showDatePicker(
+                      context : context,
+                      firstDate : DateTime(DateTime.now().year-10),
+                      lastDate : DateTime(DateTime.now().year+1),
+                      initialDate: DateTime.now(),
+                    );
+                    if(date != null ){
+                      var lvdate = DateFormat("yyyy-MM-dd").format(date);
+                  //    print (lvdate);
+                      setState((){
+                         
+                          enddate.text = lvdate;
+
+                      });
+                    }
+                  } ,
+                    ),
                     contentPadding: EdgeInsets.all(20.0),
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
@@ -343,6 +410,7 @@ httpcall() async {
                     }
                     return null;
                   },
+                  
                 )
               ),
               Padding(
@@ -352,6 +420,24 @@ httpcall() async {
                   // The validator receives the text that the user has entered.
                   decoration: new InputDecoration(
                     labelText: "Required End time",
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.watch_later_rounded),
+                      onPressed: () async{
+                    TimeOfDay? time;
+                    time =  await showTimePicker(
+                      context : context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    if(time != null ){
+                      final now = new DateTime.now();
+                      final dt = DateTime(now.year,now.month,now.day,time.hour,time.minute);
+                      final format = DateFormat("HH:mm:ss").format(dt);
+                     print (time);
+                      setState((){
+                          endtime.text = format;
+                      });
+                    }
+                  } ),
                     contentPadding: EdgeInsets.all(20.0),
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
@@ -365,6 +451,7 @@ httpcall() async {
                     }
                     return null;
                   },
+                  
                 )
               ),
               Padding(

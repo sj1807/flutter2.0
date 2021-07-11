@@ -5,6 +5,8 @@ import './main.dart';
 import './sessionlog.dart';
 import './wofromnotification.dart';
 
+import 'package:intl/intl.dart';
+
 
 class Breakdown extends StatefulWidget{
   @override
@@ -286,6 +288,27 @@ httpcall() async {
                   // The validator receives the text that the user has entered.
                   decoration: new InputDecoration(
                     labelText: "Breakdown Start Date",
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.calendar_today),
+                      onPressed: () async{
+                    DateTime? date;
+                    date =  await showDatePicker(
+                      context : context,
+                      firstDate : DateTime(DateTime.now().year-10),
+                      lastDate : DateTime(DateTime.now().year+1),
+                      initialDate: DateTime.now(),
+                    );
+                    if(date != null ){
+                      var lvdate = DateFormat("yyyy-MM-dd").format(date);
+                  //    print (lvdate);
+                      setState((){
+                         
+                          startdate.text = lvdate;
+
+                      });
+                    }
+                  } ,
+                    ),
                     contentPadding: EdgeInsets.all(20.0),
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
@@ -308,6 +331,24 @@ httpcall() async {
                   // The validator receives the text that the user has entered.
                   decoration: new InputDecoration(
                     labelText: "Breakdown Start Time",
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.watch_later_rounded),
+                      onPressed: () async{
+                    TimeOfDay? time;
+                    time =  await showTimePicker(
+                      context : context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    if(time != null ){
+                      final now = new DateTime.now();
+                      final dt = DateTime(now.year,now.month,now.day,time.hour,time.minute);
+                      final format = DateFormat("HH:mm:ss").format(dt);
+                     print (time);
+                      setState((){
+                          starttime.text = format;
+                      });
+                    }
+                  } ),
                     contentPadding: EdgeInsets.all(20.0),
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
@@ -330,6 +371,27 @@ httpcall() async {
                   // The validator receives the text that the user has entered.
                   decoration: new InputDecoration(
                     labelText: "Breakdown End Date",
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.calendar_today),
+                      onPressed: () async{
+                    DateTime? date;
+                    date =  await showDatePicker(
+                      context : context,
+                      firstDate : DateTime(DateTime.now().year-10),
+                      lastDate : DateTime(DateTime.now().year+1),
+                      initialDate: DateTime.now(),
+                    );
+                    if(date != null ){
+                      var lvdate = DateFormat("yyyy-MM-dd").format(date);
+                  //    print (lvdate);
+                      setState((){
+                         
+                          enddate.text = lvdate;
+
+                      });
+                    }
+                  } ,
+                    ),
                     contentPadding: EdgeInsets.all(20.0),
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
@@ -346,6 +408,24 @@ httpcall() async {
                   // The validator receives the text that the user has entered.
                   decoration: new InputDecoration(
                     labelText: "Breakdown End time",
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.watch_later_rounded),
+                      onPressed: () async{
+                    TimeOfDay? time;
+                    time =  await showTimePicker(
+                      context : context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    if(time != null ){
+                      final now = new DateTime.now();
+                      final dt = DateTime(now.year,now.month,now.day,time.hour,time.minute);
+                      final format = DateFormat("HH:mm:ss").format(dt);
+                     print (time);
+                      setState((){
+                          endtime.text = format;
+                      });
+                    }
+                  } ),
                     contentPadding: EdgeInsets.all(20.0),
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
