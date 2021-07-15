@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import './main.dart';
 import './sessionlog.dart';
 import './wofromnotification.dart';
-
 import 'package:intl/intl.dart';
 
 
@@ -95,7 +94,7 @@ httpcall() async {
         var temps = resp["status"]["LV_NOTIFICATION"]["_text"];
         print(temps);
         var temp = int.parse(temps);
-        Logs ldata = Logs('Created a Breakdown Notification Number is : $temp');
+        Logs ldata = Logs('${DateFormat("yyyy-MM-dd H:mm:s").format(DateTime.now())} :: Created a Breakdown Notification Number is : $temp');
         sessionlog.add(ldata);
         sendnoti('Created Notification Number is : $temp');
         this.notifno = temp;

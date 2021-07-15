@@ -12,14 +12,15 @@ class VBreakdown extends StatefulWidget{
 }
 
 class _State extends State<VBreakdown>{
- // String bndate;
-
+  
+    List<Notification> notificationscontrol = [];
     String removezero(String a){
       var temp = int.parse(a);
-    //  print("$temp convertedd value");
       return temp.toString();
     }
   TextEditingController dateController = TextEditingController();
+  TextEditingController searcher = TextEditingController();
+  
 
   Future<List<Notification>> httpcall(String user, String date) async {
 
@@ -67,6 +68,7 @@ class _State extends State<VBreakdown>{
         var a="0";var b="NA";var c="NA"; var d="Not Created"; var e="No notifications available";
         Notification data = Notification(a,b, c,d,e);
         notifications.add(data);
+       // notificationscontrol = notifications;
         return notifications;
       }
 
@@ -78,13 +80,43 @@ class _State extends State<VBreakdown>{
         Notification data = Notification(a,b, c,d,e);
         List<Notification> notifications = [];
         notifications.add(data);
+        this.notificationscontrol = notifications;
+        this.copydata= notifications;
         return notifications;
 
     }
   }
 
+void initState(){
+  super.initState();
+  searcher.text="0";
+  
+}
 
-  @override
+  List<Notification> copydata = [];
+onItemChanged(String value){
+ List<Notification> results = [];
+  if(value.isEmpty){
+    setState(() {
+        notificationscontrol = copydata;
+       
+        });
+         return;
+  }else{
+      notificationscontrol.forEach((number) { 
+        if(number.number.contains(value)){
+          results.add(number);
+          print(number.number);
+        }
+    });
+    setState(() {
+          notificationscontrol = results;
+        });
+  }
+    
+}
+
+ 
 
   Widget build(BuildContext context){
     return Scaffold(
@@ -104,9 +136,23 @@ class _State extends State<VBreakdown>{
             child: Text("Notifications are displayed according to their status",
               textAlign: TextAlign.center,)
             ),
+            Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(10),
+            child: TextField(
+              controller: searcher,
+              decoration: InputDecoration(
+                hintText:"Search Notifications by number",
+                icon: Icon(Icons.search)
+              ),
+              onChanged: onItemChanged,
+            )
+            ),
           Container(
             child:FutureBuilder(
               future: httpcall(sessionuser,'2008-01-01'),
+              
+           //  future: localtry,
               builder: (BuildContext context, AsyncSnapshot snapshot){                      //print(snapshot.data);
                 if(snapshot.data == null){
                   return Container(
@@ -116,21 +162,27 @@ class _State extends State<VBreakdown>{
                   );
                 }
                 else {
+                
+                 copydata = snapshot.data;
+                  
                   return ListView.builder(
                     //scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     physics: ClampingScrollPhysics(),
-                    itemCount: snapshot.data.length,
+                    itemCount: notificationscontrol.length,
+                //    itemCount: snapshot.data.length,
                     itemBuilder: (BuildContext context , int index){
                       return Card(
                         color: Colors.grey[100],
                         child:ListTile(
-                        leading: Text("Type\n"+" "+snapshot.data[index].type,style: TextStyle(color:Colors.red[400]),),
+                          leading: Text("Type\n"+" "+notificationscontrol[index].type,style: TextStyle(color:Colors.red[400]),),
+                  //     
+                   //     leading: Text("Type\n"+" "+snapshot.data[index].type,style: TextStyle(color:Colors.red[400]),),
                         trailing: Icon(Icons.arrow_forward_ios),
-                        subtitle: Text("  Date:"+snapshot.data[index].date+"\n  Description:"+snapshot.data[index].description,style: TextStyle(color:Colors.blue),),
-                        title: Text("Notification No.: "+removezero(snapshot.data[index].number)+"\nStatus: "+snapshot.data[index].status),
+                        subtitle: Text("  Date:"+notificationscontrol[index].date+"\n  Description:"+notificationscontrol[index].description,style: TextStyle(color:Colors.blue),),
+                        title: Text("Notification No.: "+removezero(notificationscontrol[index].number)+"\nStatus: "+notificationscontrol[index].status),
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Detailednote(snapshot.data[index].number),
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Detailednote(notificationscontrol[index].number),
                         ),);
                       },
                       )
@@ -169,6 +221,7 @@ class _State extends State<VBreakdown>{
     );
   }
 }
+
 
 class Notification{
   final String number;

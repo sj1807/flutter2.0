@@ -96,7 +96,7 @@ httpcall() async {
         print("ok user");
         var temps = resp["status"]["LV_NOTIFICATION"]["_text"];
         var temp = int.parse(temps);
-        Logs ldata = Logs('Created a Maintenance Notification Number is : $temp');
+        Logs ldata = Logs('${DateFormat("yyyy-MM-dd H:mm:s").format(DateTime.now())} :: Created a Maintenance Notification Number is : $temp');
         sessionlog.add(ldata);
         sendnoti('Created Notification Number is : $temp');
         this.notifno = temp;

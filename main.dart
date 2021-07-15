@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import './Login.dart';
 import './sessionlog.dart';
 import './Dashboard.dart';
+import 'package:intl/intl.dart';
 import './Createselection.dart';
 import './breakdown.dart';
 import './viewbreakdown.dart';
@@ -20,7 +21,7 @@ import './createwo.dart';
 import './selctnotifunctions.dart';
 import './chatscreen.dart';
 
-var baseUrl = "https://b43d8e958f05.ngrok.io";
+var baseUrl = "https://c91ada324109.ngrok.io";
 int logg=1;
 var sessionuser="";
 var fcm = '';
@@ -34,7 +35,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async{
       print('the message is ${message.data}');
     print('the message is ${message.notification}');
   print(message);
-  Logs ldata = Logs('Notification Recieved-${message.data["title"]} - ${message.data["body"]}');
+  Logs ldata = Logs('${DateFormat("yyyy-MM-dd H:mm:s").format(DateTime.now())} :: Notification Recieved-${message.data["title"]} - ${message.data["body"]}');
   sessionlog.add(ldata);
 }
 Future<void> main() async{
@@ -52,7 +53,7 @@ Future<void> main() async{
     print('got a message');
     print('the message is ${message.data}');
     print('the message is ${message.notification}');
-      Logs ldata = Logs('Notification Recieved-${message.data["title"]}-${message.data["body"]}');
+      Logs ldata = Logs('${DateFormat("yyyy-MM-dd H:mm:s").format(DateTime.now())} :: Notification Recieved-${message.data["title"]}-${message.data["body"]}');
       sessionlog.add(ldata);
    
 
@@ -65,7 +66,7 @@ Future<void> main() async{
 
     print('the message is ${message.data}');
     print('the message is ${message.notification}');
-    Logs ldata = Logs('Notification Recieved-${message.data["title"]}-${message.data["body"]}');
+    Logs ldata = Logs('${DateFormat("yyyy-MM-dd H:mm:s").format(DateTime.now())} :: Notification Recieved-${message.data["title"]}-${message.data["body"]}');
     sessionlog.add(ldata);
 
   });

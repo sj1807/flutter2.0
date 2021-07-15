@@ -5,6 +5,7 @@ import 'dart:convert';
 import './main.dart';
 import './detailednotification.dart';
 import './sessionlog.dart';
+import 'package:intl/intl.dart';
 
 
 
@@ -94,7 +95,7 @@ httpcall() async {
         var temps = resp["status"]["NOTIFHEADER_EXPORT"]["NOTIF_NO"]["_text"];
         print(temps);
         var temp = int.parse(temps);
-        Logs ldata = Logs('Changed notification details of : $temp');
+        Logs ldata = Logs('${DateFormat("yyyy-MM-dd H:mm:s").format(DateTime.now())} :: Changed notification details of : $temp');
         sessionlog.add(ldata);
         sendnoti('Changed Notification Number is : $temp');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Changed Notification Number is : $temp')));

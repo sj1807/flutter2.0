@@ -42,10 +42,11 @@ class _State extends State<Logout>{
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/home.png'),
-                          Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("No Go home",
+                          Icon(Icons.home,color: Colors.white,size:50.0),
+                       //   Image.asset('assets/home.png'),
+                          Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("Go home",
                               style:TextStyle(
-                                  color: Colors.white
+                                  color: Colors.black
                               )),)
                         ],
                       ),
@@ -74,10 +75,11 @@ class _State extends State<Logout>{
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/logout.png'),
+                          Icon(Icons.logout,color: Colors.white,size:50.0),
+                          //Image.asset('assets/logout.png'),
                           Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text(" Yes Logout",
                               style:TextStyle(
-                                  color: Colors.white
+                                  color: Colors.black
                               )),)
                         ],
                       ),

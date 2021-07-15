@@ -6,11 +6,19 @@ import './detailedwo.dart';
 import 'package:http/http.dart' as http;
 
 
-class Viewwo extends StatelessWidget{
- final String loca;
+class Viewwo extends StatefulWidget{
+  final String loca;
  Viewwo(this.loca);
- 
 
+  
+  @override
+  State<Viewwo> createState() => new _State();
+}
+
+class _State extends State<Viewwo>{
+ 
+ 
+TextEditingController searcher = TextEditingController();
   String removezero(String a){
     var temp = int.parse(a);
     //  print("$temp convertedd value");
@@ -20,9 +28,9 @@ class Viewwo extends StatelessWidget{
 
   Future<List<WorkOrder>> httpcall() async {
 
-    print('$loca, selected location');
+    print('${widget.loca}, selected location');
     var tempo;
-    switch(loca){
+    switch(widget.loca){
       case "General Electric M1 Plant":{tempo="GEM1";}break;
       case "General Electric C1 Plant":{tempo="GEC1";}break;
       
@@ -87,6 +95,38 @@ class Viewwo extends StatelessWidget{
   }
 
 
+  List<WorkOrder> workorderscontrol = [];
+  List<WorkOrder> copydata = [];
+
+void initState(){
+  super.initState();
+  searcher.text="0";
+  
+}
+
+onItemChanged(String value){
+ List<WorkOrder> results = [];
+  if(value.isEmpty){
+setState(() {
+        workorderscontrol = copydata;
+});
+       return;
+  }else{
+      workorderscontrol.forEach((number) { 
+        if(number.number.contains(value)){
+          results.add(number);
+          print(number.number);
+        }
+    });
+    setState(() {
+          workorderscontrol = results;
+        });
+  }
+    
+}
+
+
+
   @override
 
   Widget build(BuildContext context){
@@ -104,8 +144,20 @@ class Viewwo extends StatelessWidget{
           Container(
             alignment: Alignment.center,
             padding: EdgeInsets.all(10),
-            child: Text("Workorders operations for $loca are displayed below",
+            child: Text("Workorders operations for ${widget.loca} are displayed below",
               textAlign: TextAlign.center,)
+            ),
+            Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(10),
+            child: TextField(
+              controller: searcher,
+              decoration: InputDecoration(
+                hintText:"Search Notifications by number",
+                icon: Icon(Icons.search)
+              ),
+              onChanged: onItemChanged,
+            )
             ),
           Container(
             child:FutureBuilder(
@@ -119,21 +171,23 @@ class Viewwo extends StatelessWidget{
                   );
                 }
                 else {
+                  copydata = snapshot.data;
+                  
                   return ListView.builder(
                     //scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     physics: ClampingScrollPhysics(),
-                    itemCount: snapshot.data.length,
+                    itemCount: workorderscontrol.length,
                     itemBuilder: (BuildContext context , int index){
                       return Card(
                         color: Colors.grey[100],
                         child:ListTile(
-                        leading: Text("Type\n"+snapshot.data[index].type,style: TextStyle(color:Colors.red[400]),),
+                        leading: Text("Type\n"+workorderscontrol[index].type,style: TextStyle(color:Colors.red[400]),),
                         trailing: Icon(Icons.arrow_forward_ios),
-                        subtitle: Text("  Date:"+snapshot.data[index].date+"\n  Description:"+snapshot.data[index].description,style: TextStyle(color:Colors.blue),),
-                        title: Text("Order No.: "+removezero(snapshot.data[index].number)+"\nStatus: "+snapshot.data[index].status),
+                        subtitle: Text("  Date:"+workorderscontrol[index].date+"\n  Description:"+workorderscontrol[index].description,style: TextStyle(color:Colors.blue),),
+                        title: Text("Order No.: "+removezero(workorderscontrol[index].number)+"\nStatus: "+workorderscontrol[index].status),
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>(Detailedwo(snapshot.data[index].number)),
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>(Detailedwo(workorderscontrol[index].number)),
                         ),);
                       },
                       )

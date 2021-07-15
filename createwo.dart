@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import './main.dart';
 import './sessionlog.dart';
+import 'package:intl/intl.dart';
 
 
 class Cworkorder extends StatefulWidget{
@@ -73,7 +74,7 @@ httpcall() async {
       if(resp["status"]!=null){
         print("ok user");
         var temps = resp["status"]["MESSAGE"]["_text"];
-        Logs ldata = Logs('$temps');
+        Logs ldata = Logs('${DateFormat("yyyy-MM-dd H:mm:s").format(DateTime.now())} :: $temps');
         sessionlog.add(ldata);
         sendnoti(temps);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$temps')));

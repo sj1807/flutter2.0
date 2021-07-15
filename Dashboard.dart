@@ -96,10 +96,12 @@ class _State extends State<Dashboard>{
                       ),
                       color: Colors.blue,
                       elevation: 10,
+                      
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/addicon.jpg'),
+                          Icon(Icons.alarm_add_rounded,color: Colors.white,size:50.0),
+                      //    Image.asset('assets/addicon.jpg'),
                           Container(padding: const EdgeInsets.all(8),alignment: Alignment.center,child: Text("    Create\n Notification",
                           style:TextStyle(
                             color: Colors.white
@@ -126,8 +128,8 @@ class _State extends State<Dashboard>{
                       elevation: 10,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/viewnotifs.jpg'),
+                        children: [ Icon(Icons.alarm,color: Colors.white,size:50.0),
+                      // Image.asset('assets/viewnotifs.jpg'),
                           Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("     View\nNotification",
                               style:TextStyle(
                                   color: Colors.white
@@ -155,7 +157,8 @@ class _State extends State<Dashboard>{
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/woview.jpg'),
+                          Icon(Icons.assignment,color: Colors.white,size:50.0),
+                        //  Image.asset('assets/woview.jpg'),
                           Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("       View\nWork Orders",
                               style:TextStyle(
                                   color: Colors.white
@@ -184,7 +187,8 @@ class _State extends State<Dashboard>{
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/createwo.png'),
+                          Icon(Icons.add_to_photos,color: Colors.white,size:50.0),
+                        //  Image.asset('assets/createwo.png'),
                           Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("    Create\nWork order",
                               style:TextStyle(
                                   color: Colors.white
@@ -213,7 +217,8 @@ class _State extends State<Dashboard>{
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/log.png'),
+                          Icon(Icons.history,color: Colors.white,size:50.0),
+                          //Image.asset('assets/log.png'),
                           Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("Session log",
                               style:TextStyle(
                                   color: Colors.white
@@ -246,7 +251,8 @@ class _State extends State<Dashboard>{
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/logout.png'),
+                          Icon(Icons.logout,color: Colors.white,size:50.0),
+                         // Image.asset('assets/logout.png'),
                           Container(padding: const EdgeInsets.all(8),alignment:Alignment.center,child: Text("Logout",
                               style:TextStyle(
                                   color: Colors.white
